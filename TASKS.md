@@ -5,15 +5,40 @@
 
 ---
 
-## Current — Immediate
+## Current — Immediate (external blockers, require browser)
 
-- [ ] Initialize git, push to GitHub, create restore/project-init tag
+- [ ] Open PR on GitHub for `feature/validate-command`
+      URL: https://github.com/Abdilamir/handoff-forge/compare/master...feature/validate-command
+      Risk: none — branch already pushed
+
+- [ ] Connect Greptile to handoff-forge repo (Phase 3 review loop)
+      URL: https://greptile.com → authorize GitHub → select handoff-forge
+      Risk: none — read-only GitHub access
+
+- [ ] Enable GitHub secret scanning
+      URL: https://github.com/Abdilamir/handoff-forge/settings/security_analysis
+      Risk: none — read-only detection
+
+## Queued — Ready to Push (branches already committed locally)
+
+- [ ] Push `chore/add-ci` branch and open PR
+      Branch: chore/add-ci (committed locally)
+      Contents: .github/workflows/ci.yml — pytest on Python 3.11 + 3.12
       Risk: low
 
-## Next
+- [ ] Push `chore/review-prep` branch and merge
+      Branch: chore/review-prep (committed locally)
+      Contents: reviews/PR_1_review_template.md, plans/PROMPT_grep-loop.md
+      Risk: low
 
-- [ ] Connect Greptile to validate review loop (Phase 3)
-      Risk: low — read-only GitHub access
+## After Review Loop (blocked on Greptile)
+
+- [ ] Run Greptile review loop on PR 1 — fix until 5/5
+      See: plans/PROMPT_grep-loop.md, reviews/PR_1_review_template.md
+      Risk: low
+
+- [ ] Merge `feature/validate-command` after Greptile 5/5 + human diff review
+      Risk: low
 
 ## Backlog
 
@@ -25,6 +50,11 @@
       Files: cli.py, templates.py, tests/
       Risk: low
 
-- [ ] Add `handoff-forge validate <dir>` command to check if all three files exist and have required sections
-      Files: cli.py, services/file_ops.py, tests/
-      Risk: low
+## TASK FORMAT
+
+Each entry:
+```
+- [ ] Short description — done = specific exit condition
+      Files: path/to/file.py (if known)
+      Risk: low | medium | high
+```
