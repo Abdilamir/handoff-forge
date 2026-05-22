@@ -99,6 +99,50 @@ handoff-forge tasks "First task" --phase "Phase 1"
 
 ---
 
+### `validate` — Check whether a project has all required OS files
+
+Checks for the presence of the six required agentic engineering OS files. Prints each file's status and exits with code 0 (all present) or 1 (any missing).
+
+```bash
+# Validate the current directory
+handoff-forge validate
+
+# Validate a specific project
+handoff-forge validate ./my-project
+```
+
+**Example output — complete project:**
+```
+Validating: /path/to/my-project
+
+  [OK]      CLAUDE.md
+  [OK]      HANDOFF.md
+  [OK]      TASKS.md
+  [OK]      PROJECT_STATE.md
+  [OK]      CHANGELOG.md
+  [OK]      SECURITY.md
+
+All required files present.
+```
+
+**Example output — incomplete project:**
+```
+Validating: /path/to/my-project
+
+  [OK]      CLAUDE.md
+  [MISSING] HANDOFF.md
+  [OK]      TASKS.md
+  [MISSING] PROJECT_STATE.md
+  [OK]      CHANGELOG.md
+  [OK]      SECURITY.md
+
+2 file(s) missing.
+```
+
+**Required files checked:** `CLAUDE.md`, `HANDOFF.md`, `TASKS.md`, `PROJECT_STATE.md`, `CHANGELOG.md`, `SECURITY.md`
+
+---
+
 ## File Safety
 
 - **Default behavior:** `init` skips files that already exist. `handoff` and `state` require `--overwrite` to replace existing files.
