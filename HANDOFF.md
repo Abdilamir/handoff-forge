@@ -6,50 +6,71 @@
 
 ---
 
-## Session: 2026-05-22 — Phase 2 complete
+## Session: 2026-05-22 — Phase 3: post-feature cleanup + CI + review prep
 
 ### What Was Built
-Full working CLI tool `handoff-forge` v0.1.0.
+Completed the full Phase 3 task sheet (everything except external-blocker steps):
 
-4 commands implemented and smoke tested:
-- `init [target-dir]` — creates HANDOFF.md, PROJECT_STATE.md, TASKS.md with templates
-- `handoff --session --built --next [--incomplete --decisions --risks]` — generates/updates HANDOFF.md
-- `state --phase --status [--stack --done --progress --next]` — rewrites PROJECT_STATE.md
-- `tasks <description> [--phase --target]` — appends task entry to TASKS.md
+1. **validate command** (previous session) — `handoff-forge validate [target-dir]` on `feature/validate-command` branch. 5 new tests, 33 total passing. Branch pushed to GitHub.
 
-Services:
-- `src/handoff_forge/services/file_ops.py` — all file I/O, backup on overwrite
-- `src/handoff_forge/services/templates.py` — markdown template generators
+2. **Post-feature structure scan** — reviewed `file_ops.py` and `cli.py` after the validate command addition. Result: clean. No duplicated code, no misplaced logic.
 
-Tests: 28 passing (tests/test_file_ops.py, tests/test_templates.py)
+3. **CI workflow** — `.github/workflows/ci.yml` on `chore/add-ci` branch. Runs pytest on Python 3.11 and 3.12 on all push/PR events targeting master.
 
-Commit: 1f3d196 | Tag: restore/project-init
+4. **Review loop preparation** — `chore/review-prep` branch:
+   - `reviews/PR_1_review_template.md` — PR review checklist and Greptile score tracking table
+   - `plans/PROMPT_grep-loop.md` — session prompts for running the Greptile review loop
+
+5. **State files updated on master** — `TASKS.md` and `PROJECT_STATE.md` reflect Phase 3 progress and document all external blockers with exact URLs.
+
+Files changed this session:
+- `.github/workflows/ci.yml` — new (on `chore/add-ci` branch, local only)
+- `reviews/PR_1_review_template.md` — new (on `chore/review-prep` branch, local only)
+- `plans/PROMPT_grep-loop.md` — new (on `chore/review-prep` branch, local only)
+- `TASKS.md` — updated to Phase 3 state (on master)
+- `PROJECT_STATE.md` — updated to Phase 3 state (on master)
+- `HANDOFF.md` — this file (on master)
+
+Tests: 33/33 passing. All branches committed locally.
 
 ### What Is Not Finished
-- Not yet pushed to GitHub
-- Greptile not yet connected (Phase 3)
-- Known minor issue: `tasks` appends before TASK FORMAT section rather than inside active phase block (cosmetic only, tracked in TASKS.md backlog)
+Three external-blocker steps — all require browser:
+
+1. **Push support branches** — two branches committed locally, not yet pushed:
+   ```
+   git push -u origin chore/add-ci
+   git push -u origin chore/review-prep
+   ```
+
+2. **PR open** — `feature/validate-command` already pushed. Open PR at:
+   `https://github.com/Abdilamir/handoff-forge/compare/master...feature/validate-command`
+
+3. **Greptile connection** — go to `https://greptile.com`, authorize GitHub, select `handoff-forge` repo
+
+4. **GitHub secret scanning** — GitHub Settings → Security → Secret scanning → Enable
+
+5. **Review loop** — after Greptile reviews PR 1, paste feedback into new session with the prompt from `plans/PROMPT_grep-loop.md`
+
+6. **Merge** — only after Greptile 5/5 + human diff review
 
 ### Decisions Made
-- Zero runtime dependencies — stdlib only. See DECISIONS.md.
-- All file I/O goes through file_ops.py — cli.py never touches the filesystem directly. See DECISIONS.md.
-- Templates are f-strings, no templating engine. See DECISIONS.md.
-- Default behavior is non-destructive — existing files are never silently overwritten. See DECISIONS.md.
+- CI runs on both 3.11 and 3.12 — catches version-specific edge cases at near-zero cost
+- `chore/add-ci` is a separate branch from `feature/validate-command` — keeps the feature PR focused
+- `REQUIRED_FILES` lives in cli.py, not services/ — it is command configuration, not service logic
 
 ### Next Step
-1. Push to GitHub:
+1. Push support branches:
    ```
-   git remote add origin https://github.com/<your-username>/handoff-forge.git
-   git push -u origin master
-   git push origin restore/project-init
+   git push -u origin chore/add-ci
+   git push -u origin chore/review-prep
    ```
-2. Connect Greptile to validate Phase 3 review loop
-3. Optional: fix tasks insertion position (TASKS.md backlog item)
+2. Open PR in browser: `https://github.com/Abdilamir/handoff-forge/compare/master...feature/validate-command`
+3. Connect Greptile at `https://greptile.com`
+4. Run review loop using `plans/PROMPT_grep-loop.md`
 
 ### Known Risks
-- None for current code
-- Phase 3 risk: Greptile may flag the tasks insertion logic as a bug — it's intentional behavior pending the backlog fix
+- Greptile may flag `REQUIRED_FILES` living in cli.py — defensible (command configuration, not service logic)
 
 ---
 
-*Last updated: 2026-05-22 | Session: Phase 2 complete*
+*Last updated: 2026-05-22 | Session: Phase 3 — post-feature cleanup, CI, review prep*
