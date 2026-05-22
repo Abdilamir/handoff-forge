@@ -1,0 +1,92 @@
+"""Tests for file_ops service."""
+
+import pytest
+from pathlib import Path
+
+from handoff_forge.services.file_ops import (
+    backup_file,
+    ensure_directory,
+    file_exists,
+    read_file,
+    write_file,
+)
+
+
+def test_read_file_returns_content(tmp_path):
+    f = tmp_path / "test.md"
+    f.write_text("hello world", encoding="utf-8")
+    assert read_file(f) == "hello world"
+
+
+def test_read_file_returns_none_if_missing(tmp_path):
+    assert read_file(tmp_path / "nonexistent.md") is None
+
+
+def test_write_file_creates_new_file(tmp_path):
+    target = tmp_path / "HANDOFF.md"
+    write_file(target, "# Handoff")
+    assert target.read_text(encoding="utf-8") == "# Handoff"
+
+
+def test_write_file_creates_parent_directories(tmp_path):
+    target = tmp_path / "deep" / "nested" / "file.md"
+    write_file(target, "content")
+    assert target.exists()
+
+
+def test_write_file_raises_if_exists_and_no_overwrite(tmp_path):
+    target = tmp_path / "file.md"
+    target.write_text("original", encoding="utf-8")
+    with pytest.raises(FileExistsError):
+        write_file(target, "new content", overwrite=False)
+
+
+def test_write_file_backs_up_existing_when_overwrite(tmp_path):
+    target = tmp_path / "file.md"
+    target.write_text("original", encoding="utf-8")
+    write_file(target, "new content", overwrite=True)
+    assert target.read_text(encoding="utf-8") == "new content"
+    # A backup file should exist
+    backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+    assert len(backups) == 1
+    assert backups[0].read_text(encoding="utf-8") == "original"
+
+
+def test_backup_file_creates_timestamped_copy(tmp_path):
+    original = tmp_path / "HANDOFF.md"
+    original.write_text("session content", encoding="utf-8")
+    backup_path = backup_file(original)
+    assert backup_path.exists()
+    assert "bak" in backup_path.name
+    assert backup_path.read_text(encoding="utf-8") == "session content"
+    # Original must still exist
+    assert original.exists()
+
+
+def test_backup_file_raises_if_source_missing(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        backup_file(tmp_path / "ghost.md")
+
+
+def test_ensure_directory_creates_nested(tmp_path):
+    target = tmp_path / "a" / "b" / "c"
+    result = ensure_directory(target)
+    assert target.is_dir()
+    assert result == target
+
+
+def test_ensure_directory_is_idempotent(tmp_path):
+    target = tmp_path / "existing"
+    target.mkdir()
+    ensure_directory(target)  # Should not raise
+    assert target.is_dir()
+
+
+def test_file_exists_true(tmp_path):
+    f = tmp_path / "exists.md"
+    f.write_text("x", encoding="utf-8")
+    assert file_exists(f) is True
+
+
+def test_file_exists_false(tmp_path):
+    assert file_exists(tmp_path / "nope.md") is False
