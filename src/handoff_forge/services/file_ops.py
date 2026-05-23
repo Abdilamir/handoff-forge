@@ -73,3 +73,32 @@ def check_required_files(directory: Path, required: list[str]) -> dict[str, bool
     """
     directory = Path(directory)
     return {name: (directory / name).exists() for name in required}
+
+
+def insert_task_entry(content: str, entry: str) -> str:
+    """
+    Insert a task entry at the end of the first non-TASK-FORMAT ## section.
+
+    Finds the first ## header that is not '## TASK FORMAT', then locates
+    the end of that section (the next ## header, a --- separator, or EOF).
+    Inserts entry after the last non-blank line of that section.
+
+    If no eligible ## section exists, appends entry to end of content.
+    """
+    lines = content.splitlines(keepends=True)
+    section_starts = [
+        i for i, line in enumerate(lines)
+        if line.startswith("## ") and not line.startswith("## TASK FORMAT")
+    ]
+    if not section_starts:
+        return content.rstrip() + f"\n{entry}\n"
+    first_end = len(lines)
+    for i in range(section_starts[0] + 1, len(lines)):
+        if lines[i].startswith("## ") or lines[i].strip() == "---":
+            first_end = i
+            break
+    insert_at = first_end
+    while insert_at > section_starts[0] + 1 and not lines[insert_at - 1].strip():
+        insert_at -= 1
+    new_lines = lines[:insert_at] + [f"{entry}\n"] + lines[insert_at:]
+    return "".join(new_lines)

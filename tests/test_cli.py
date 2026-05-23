@@ -66,3 +66,23 @@ def test_cmd_tasks_appends_when_no_sections(tmp_path):
     cmd_tasks(args)
     content = tasks_file.read_text(encoding="utf-8")
     assert content.endswith("- [ ] orphan task\n")
+
+
+def test_cmd_tasks_with_real_template_separator(tmp_path):
+    """tasks_template generates --- as the section delimiter; new tasks must land before it."""
+    tasks_file = tmp_path / "TASKS.md"
+    tasks_file.write_text(
+        "# TASKS.md\n\n"
+        "## Phase 1\n\n"
+        "- [ ] existing task\n\n"
+        "---\n\n"
+        "## TASK FORMAT (for new tasks)\n\nformat info\n",
+        encoding="utf-8",
+    )
+    args = _make_args("real template task", str(tmp_path))
+    cmd_tasks(args)
+    content = tasks_file.read_text(encoding="utf-8")
+    phase_pos = content.index("## Phase 1")
+    sep_pos = content.index("---")
+    new_task_pos = content.index("- [ ] real template task")
+    assert phase_pos < new_task_pos < sep_pos

@@ -163,23 +163,7 @@ def cmd_tasks(args: argparse.Namespace) -> int:
 
     if file_ops.file_exists(path):
         existing = file_ops.read_file(path) or ""
-        lines = existing.splitlines(keepends=True)
-        section_starts = [i for i, line in enumerate(lines) if line.startswith("## ")]
-        if section_starts:
-            # Find end of first section: next ## header, a --- separator, or EOF
-            first_end = len(lines)
-            for i in range(section_starts[0] + 1, len(lines)):
-                if lines[i].startswith("## ") or lines[i].strip() == "---":
-                    first_end = i
-                    break
-            # Insert after last non-blank line in first section
-            insert_at = first_end
-            while insert_at > section_starts[0] + 1 and not lines[insert_at - 1].strip():
-                insert_at -= 1
-            new_lines = lines[:insert_at] + [f"{entry}\n"] + lines[insert_at:]
-            updated = "".join(new_lines)
-        else:
-            updated = existing.rstrip() + f"\n{entry}\n"
+        updated = file_ops.insert_task_entry(existing, entry)
         file_ops.write_file(path, updated, overwrite=True)
     else:
         # No existing file — create a minimal one with this task

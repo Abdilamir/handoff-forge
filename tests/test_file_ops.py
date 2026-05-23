@@ -8,6 +8,7 @@ from handoff_forge.services.file_ops import (
     check_required_files,
     ensure_directory,
     file_exists,
+    insert_task_entry,
     read_file,
     write_file,
 )
@@ -123,3 +124,35 @@ def test_check_required_files_preserves_order(tmp_path):
 def test_check_required_files_empty_list(tmp_path):
     result = check_required_files(tmp_path, [])
     assert result == {}
+
+
+# --- insert_task_entry ---
+
+def test_insert_task_entry_into_first_section():
+    content = "# TASKS.md\n\n## Current\n\n- [ ] existing\n\n## Next\n\n- [ ] queued\n"
+    result = insert_task_entry(content, "- [ ] new task")
+    current_pos = result.index("## Current")
+    next_pos = result.index("## Next")
+    new_pos = result.index("- [ ] new task")
+    assert current_pos < new_pos < next_pos
+
+
+def test_insert_task_entry_with_separator():
+    content = "# TASKS.md\n\n## Phase 1\n\n- [ ] existing\n\n---\n\n## TASK FORMAT\n\nfmt\n"
+    result = insert_task_entry(content, "- [ ] new task")
+    sep_pos = result.index("---")
+    new_pos = result.index("- [ ] new task")
+    assert new_pos < sep_pos
+
+
+def test_insert_task_entry_task_format_first_falls_back_to_append():
+    content = "# TASKS.md\n\n## TASK FORMAT\n\nfmt info\n"
+    result = insert_task_entry(content, "- [ ] new task")
+    assert result.endswith("- [ ] new task\n")
+    assert "fmt info" in result
+
+
+def test_insert_task_entry_no_sections_appends():
+    content = "# TASKS.md\n\nsome content\n"
+    result = insert_task_entry(content, "- [ ] orphan")
+    assert result.endswith("- [ ] orphan\n")
