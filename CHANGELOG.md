@@ -2,60 +2,39 @@
 
 ---
 
-## 2026-05-22 — Phase 3
+## 2026-05-23
 
-### [2026-05-22] — feat: validate command
-- **Branch:** `feature/validate-command`
-- **PR:** pending Greptile review
-- **What:** Added `handoff-forge validate [target]` — checks for required OS files, prints status per file, exits 0 (all present) or 1 (any missing)
+### [2026-05-23] — fix: tasks insertion position (PR #2) — MERGED
+- **Branch:** `fix/tasks-insertion-position`
+- **Greptile:** Round 1: 4/5 → Round 2: 5/5
+- **What:** Fixed `cmd_tasks` inserting new tasks before `## TASK FORMAT` instead of inside the first active section. Moved insertion algorithm to `file_ops.py` per CLAUDE.md rules 2&3.
 - **Files changed:**
-  - `src/handoff_forge/services/file_ops.py` — added `check_required_files()`
-  - `src/handoff_forge/cli.py` — added `cmd_validate()`, `REQUIRED_FILES` constant, and validate subparser
-  - `tests/test_file_ops.py` — added 5 tests for `check_required_files`
-  - `README.md` — added validate command section with example output
-- **Tests added:** 5 new — 33 total passing
-- **Breaking changes:** None — purely additive
+  - `src/handoff_forge/services/file_ops.py` — added `insert_task_entry()`
+  - `src/handoff_forge/cli.py` — `cmd_tasks` reduced to 3-line orchestration
+  - `tests/test_file_ops.py` — 4 new tests for `insert_task_entry`
+  - `tests/test_cli.py` — new file, 5 tests for `cmd_tasks` CLI behavior
+  - `plans/PLAN_fix-tasks-insertion.md` — implementation plan
+- **Tests:** 9 new — 42 total passing
+- **Breaking changes:** None
+- **Tags:** `restore/post-tasks-fix-merge`
 
 ---
 
-### [2026-05-22] — Phase 3: CI + review loop infrastructure
-- **Branches:** `chore/add-ci`, `chore/review-prep` (pushed to origin)
-- **What:** CI workflow, review loop prep files, state file updates
-- **Files changed:**
-  - `.github/workflows/ci.yml` — pytest on Python 3.11 + 3.12, all push/PR events
-  - `reviews/PR_1_review_template.md` — PR checklist and Greptile score table
-  - `plans/PROMPT_grep-loop.md` — grep loop session prompts
-  - `TASKS.md` — updated to Phase 3 with browser blockers and queued branches
-  - `PROJECT_STATE.md` — updated to Phase 3 in-progress state
-  - `HANDOFF.md` — session end state
+## 2026-05-22
 
-### [2026-05-22] — feat: validate command (PR #1)
-- **Branch:** `feature/validate-command` — PR open, Greptile reviewed
+### [2026-05-22] — feat: validate command (PR #1) — MERGED
+- **Branch:** `feature/validate-command`
+- **Greptile:** 5/5
 - **What:** Added `handoff-forge validate [target]` — checks for 6 required OS files, prints status per file, exits 0 (all present) or 1 (any missing)
 - **Files changed:**
   - `src/handoff_forge/services/file_ops.py` — added `check_required_files()`
-  - `src/handoff_forge/cli.py` — added `cmd_validate()`, `REQUIRED_FILES` constant, and validate subparser
-  - `tests/test_file_ops.py` — added 5 tests for `check_required_files`
-  - `README.md` — added validate command section with example output
-- **Tests added:** 5 new — 33 total passing
-- **Breaking changes:** None — purely additive
-- **Status:** MERGED — Greptile 5/5, 33 tests passing, merged to master
-
----
+  - `src/handoff_forge/cli.py` — added `cmd_validate()`, `REQUIRED_FILES` constant, validate subparser
+  - `tests/test_file_ops.py` — 5 tests for `check_required_files`
+  - `README.md` — validate command section with example output
+- **Tests:** 5 new — 33 total at merge
+- **Tags:** `restore/post-validate-merge`
 
 ### [2026-05-22] — Phase 2 complete: handoff-forge v0.1.0
-- **Commit:** restore/project-init (initial)
-- **What:** Full working CLI with 4 commands and 28 passing tests
-- **Files created:**
-  - `pyproject.toml` — build config, entry point, dev deps
-  - `src/handoff_forge/__init__.py`
-  - `src/handoff_forge/cli.py` — init, handoff, state, tasks commands
-  - `src/handoff_forge/services/__init__.py`
-  - `src/handoff_forge/services/file_ops.py` — safe file I/O service
-  - `src/handoff_forge/services/templates.py` — markdown template generators
-  - `tests/__init__.py`
-  - `tests/test_file_ops.py` — 12 tests
-  - `tests/test_templates.py` — 16 tests
-  - `README.md`
-  - OS scaffold: CLAUDE.md, HANDOFF.md, TASKS.md, PROJECT_STATE.md, CHANGELOG.md, DECISIONS.md, SECURITY.md, plans/, reviews/
-- **Tests added:** 28 — all passing
+- **Commit:** `restore/project-init` tag
+- **What:** Full working CLI — 5 commands (init, handoff, state, tasks, validate), stdlib only, 28 tests
+- **Files created:** pyproject.toml, src/handoff_forge/, tests/, README.md, full OS scaffold

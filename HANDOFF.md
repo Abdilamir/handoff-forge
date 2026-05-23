@@ -6,43 +6,43 @@
 
 ---
 
-## Session: 2026-05-22 — Phase 3 merged, Phase 4 fix branch ready
+## Session: 2026-05-23 — PR #2 merged, feat/handoff-append in progress
 
-### What Was Completed This Session
-1. **PR #1 merged** — `feat: add validate command`, Greptile 5/5, 33/33 tests, no-ff merge
-2. **restore/post-validate-merge** tag created and pushed to origin
-3. **feature/validate-command** deleted locally and remotely
-4. **fix/tasks-insertion-position** branch created from master
-5. **Bug diagnosed** — `cmd_tasks` searched for `## TASK FORMAT` as insertion point, causing new tasks to land after Backlog in multi-section TASKS.md files
-6. **Failing test written first** — `tests/test_cli.py::test_cmd_tasks_inserts_into_first_section` confirmed the bug
-7. **Fix implemented** — replaced `## TASK FORMAT` marker search with first-section-end detection in `cli.py:cmd_tasks`
-8. **37/37 tests passing** on fix branch
-9. **Branch pushed** to origin: `fix/tasks-insertion-position`
+### What Was Completed
+1. **PR #2 merged** — `fix: tasks insertion position`, Greptile 5/5 (Round 1: 4/5, Round 2: 5/5)
+   - Round 1 fixes: moved `insert_task_entry()` to `file_ops.py`, fixed TASK FORMAT-first edge case, added `---` separator test
+   - 42/42 tests passing at merge, restore/post-tasks-fix-merge tag created
+   - fix/tasks-insertion-position deleted locally and remotely
+
+2. **feat/handoff-append** started immediately:
+   - Plan: `plans/PLAN_feat-handoff-append.md`
+   - `handoff_append_entry()` added to `templates.py`
+   - `--append` flag added to `handoff` subparser
+   - `cmd_handoff` handles: append+overwrite error, append+exists (note entry), append+no-file (full template)
+   - 3 new tests in `test_templates.py`, 3 new tests in `test_cli.py`
+   - 48/48 tests passing on branch (locally)
 
 ### Active Task
-`fix/tasks-insertion-position` — branch on origin, fix committed, 37 tests passing.
+`feat/handoff-append` — implemented locally, not yet pushed.
 
-**What was fixed:** `cmd_tasks` in `cli.py:164–173`. New tasks now insert at the end of the first `## ` section (inside Current), not just before `## TASK FORMAT` (after Backlog).
-
-### What Is Not Finished
-- PR not yet opened for `fix/tasks-insertion-position`
-- Greptile review not yet triggered
-- `chore/add-ci` and `chore/review-prep` branches: on origin, PRs not yet opened
+**What it does:** `handoff-forge handoff --session "..." --built "..." --next "..." --append`
+appends a compact dated note to the bottom of an existing HANDOFF.md instead of rewriting it.
 
 ### Decisions Made
-- Fix scoped to `cmd_tasks` only — no service-layer extraction needed (single-use logic)
-- `tests/test_cli.py` created as the test home for CLI-level command tests
-- Failing test written before fix (OS workflow: test loop discipline)
+- `handoff_append_entry()` in templates.py (same layer as all other generators)
+- `--append` and `--overwrite` are mutually exclusive — runtime error if both set
+- Append on non-existent file falls through to full template create (safe default)
+- Compact format: `## Note: {date} — {session}` with `**Built:**` and `**Next:**` lines only
 
 ### Next Step
-1. Open PR: `https://github.com/Abdilamir/handoff-forge/compare/master...fix/tasks-insertion-position`
-2. Wait for Greptile review → paste feedback → run loop → fix until 5/5
-3. Merge fix branch, create restore tag, delete branch
-4. Open PRs for `chore/add-ci` and `chore/review-prep`
+1. `git checkout feat/handoff-append && git stash pop` (resolve CHANGELOG conflict, keep master's version)
+2. `git push -u origin feat/handoff-append`
+3. Open PR: `https://github.com/Abdilamir/handoff-forge/compare/master...feat/handoff-append`
+4. Greptile review → fix until 5/5 → merge
 
 ### Known Risks
-- None in the fix — purely additive test file, confined one-function change in cli.py
+- None in the implementation
 
 ---
 
-*Last updated: 2026-05-22 | Session: PR #1 merged, fix/tasks-insertion-position ready for review*
+*Last updated: 2026-05-23 | Session: PR #2 merged, feat/handoff-append 48 tests passing*
