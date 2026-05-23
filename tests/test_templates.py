@@ -81,6 +81,18 @@ class TestHandoffTemplate:
         )
         assert "*Last updated: 2026-05-22 | Session: Deploy step*" in result
 
+    def test_header_acknowledges_append(self):
+        result = handoff_template(
+            session="S",
+            what_built="x",
+            not_finished="x",
+            decisions="x",
+            next_step="x",
+            risks="x",
+        )
+        assert "authoritative session state" in result
+        assert "always a full rewrite" not in result
+
 
 class TestProjectStateTemplate:
     def test_contains_phase(self):

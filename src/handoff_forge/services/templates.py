@@ -19,8 +19,8 @@ def handoff_template(
     return f"""\
 # HANDOFF.md
 
-> This file is always a full rewrite — not an append.
-> It represents the current state of the project right now.
+> This file is the authoritative session state.
+> It is typically a full rewrite at session end; use --append for mid-session notes.
 > A fresh agent reads this first, before doing anything else.
 
 ---

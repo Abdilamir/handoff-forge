@@ -54,6 +54,15 @@ def test_write_file_backs_up_existing_when_overwrite(tmp_path):
     assert backups[0].read_text(encoding="utf-8") == "original"
 
 
+def test_write_file_no_backup_when_backup_false(tmp_path):
+    target = tmp_path / "file.md"
+    target.write_text("original", encoding="utf-8")
+    write_file(target, "new content", overwrite=True, backup=False)
+    assert target.read_text(encoding="utf-8") == "new content"
+    backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+    assert len(backups) == 0
+
+
 def test_backup_file_creates_timestamped_copy(tmp_path):
     original = tmp_path / "HANDOFF.md"
     original.write_text("session content", encoding="utf-8")

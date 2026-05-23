@@ -114,6 +114,9 @@ def test_cmd_handoff_append_adds_note_to_existing_file(tmp_path):
     assert "Original content." in content
     assert "Test session" in content
     assert "Built something" in content
+    # --append must not create backup files
+    backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+    assert len(backups) == 0
 
 
 def test_cmd_handoff_append_creates_full_file_when_none_exists(tmp_path):

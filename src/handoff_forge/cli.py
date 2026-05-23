@@ -122,7 +122,7 @@ def cmd_handoff(args: argparse.Namespace) -> int:
             what_built=args.built,
             next_step=args.next,
         )
-        result = file_ops.write_file(path, existing.rstrip() + note, overwrite=True)
+        result = file_ops.write_file(path, existing.rstrip() + note, overwrite=True, backup=False)
         print(f"Appended note to: {result}")
         return 0
 
