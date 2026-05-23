@@ -25,7 +25,7 @@
   - `README.md` — added validate command section with example output
 - **Tests added:** 5 new — 33 total passing
 - **Breaking changes:** None — purely additive
-- **Status:** PR #1 open — awaiting grep loop completion before merge
+- **Status:** MERGED — Greptile 5/5, 33 tests passing, merged to master
 
 ---
 
