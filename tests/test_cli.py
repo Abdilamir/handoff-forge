@@ -4,11 +4,25 @@ import argparse
 import pytest
 from pathlib import Path
 
-from handoff_forge.cli import cmd_tasks
+from handoff_forge.cli import cmd_handoff, cmd_tasks
 
 
 def _make_args(task: str, target: str, phase: str = "Current Phase") -> argparse.Namespace:
     return argparse.Namespace(task=task, target=target, phase=phase)
+
+
+def _make_handoff_args(target: str, *, append: bool = False, overwrite: bool = False) -> argparse.Namespace:
+    return argparse.Namespace(
+        session="Test session",
+        built="Built something",
+        next="Do next thing",
+        incomplete=None,
+        decisions=None,
+        risks=None,
+        target=target,
+        overwrite=overwrite,
+        append=append,
+    )
 
 
 def test_cmd_tasks_creates_new_file(tmp_path):
@@ -86,3 +100,32 @@ def test_cmd_tasks_with_real_template_separator(tmp_path):
     sep_pos = content.index("---")
     new_task_pos = content.index("- [ ] real template task")
     assert phase_pos < new_task_pos < sep_pos
+
+
+# --- cmd_handoff ---
+
+def test_cmd_handoff_append_adds_note_to_existing_file(tmp_path):
+    handoff_file = tmp_path / "HANDOFF.md"
+    handoff_file.write_text("# HANDOFF.md\n\n## Session: today — Original\n\nOriginal content.\n", encoding="utf-8")
+    args = _make_handoff_args(str(tmp_path), append=True)
+    result = cmd_handoff(args)
+    assert result == 0
+    content = handoff_file.read_text(encoding="utf-8")
+    assert "Original content." in content
+    assert "Test session" in content
+    assert "Built something" in content
+
+
+def test_cmd_handoff_append_creates_full_file_when_none_exists(tmp_path):
+    args = _make_handoff_args(str(tmp_path), append=True)
+    result = cmd_handoff(args)
+    assert result == 0
+    content = (tmp_path / "HANDOFF.md").read_text(encoding="utf-8")
+    assert "# HANDOFF.md" in content
+    assert "Test session" in content
+
+
+def test_cmd_handoff_append_and_overwrite_errors(tmp_path):
+    args = _make_handoff_args(str(tmp_path), append=True, overwrite=True)
+    result = cmd_handoff(args)
+    assert result == 1

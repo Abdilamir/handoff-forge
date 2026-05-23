@@ -131,3 +131,13 @@ def tasks_template(
 def task_entry(description: str) -> str:
     """Format a single task line for appending to TASKS.md."""
     return f"- [ ] {description}"
+
+
+def handoff_append_entry(
+    session: str,
+    what_built: str,
+    next_step: str,
+    updated: str | None = None,
+) -> str:
+    today = updated or date.today().isoformat()
+    return f"\n---\n\n## Note: {today} — {session}\n\n**Built:** {what_built}\n**Next:** {next_step}\n"
