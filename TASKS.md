@@ -5,39 +5,40 @@
 
 ---
 
-## Current — Immediate (external blockers, require browser)
+## Current — In Progress
 
-- [ ] Open PR on GitHub for `feature/validate-command`
-      URL: https://github.com/Abdilamir/handoff-forge/compare/master...feature/validate-command
-      Risk: none — branch already pushed
+- [ ] Run Greptile review loop on PR #1 — fix until 5/5
+      Branch: feature/validate-command
+      See: plans/PROMPT_grep-loop.md, reviews/PR_1_review_template.md
+      Status: Greptile has posted review — awaiting feedback paste into session
+      Risk: low
 
-- [ ] Connect Greptile to handoff-forge repo (Phase 3 review loop)
-      URL: https://greptile.com → authorize GitHub → select handoff-forge
-      Risk: none — read-only GitHub access
+## Blocked on Human Action
+
+- [ ] Paste Greptile's PR #1 review feedback into Claude Code session
+      Action: copy the Greptile review comment from GitHub PR #1 and paste here
+      Why: grep loop cannot execute without the actual review content
+
+## Next (after PR #1 merged)
+
+- [ ] Merge `feature/validate-command` after Greptile 5/5 + human diff review
+      Risk: low — requires approval
+      Checklist: all tests passing, CHANGELOG updated, HANDOFF updated
 
 - [ ] Enable GitHub secret scanning
       URL: https://github.com/Abdilamir/handoff-forge/settings/security_analysis
       Risk: none — read-only detection
 
-## Queued — Ready to Push (branches already committed locally)
+## Queued — Ready (branches already on origin)
 
-- [ ] Push `chore/add-ci` branch and open PR
-      Branch: chore/add-ci (committed locally)
+- [ ] Open PR for `chore/add-ci` → merge to master
+      Branch: chore/add-ci (on origin)
       Contents: .github/workflows/ci.yml — pytest on Python 3.11 + 3.12
       Risk: low
 
-- [ ] Push `chore/review-prep` branch and merge
-      Branch: chore/review-prep (committed locally)
+- [ ] Open PR for `chore/review-prep` → merge to master
+      Branch: chore/review-prep (on origin)
       Contents: reviews/PR_1_review_template.md, plans/PROMPT_grep-loop.md
-      Risk: low
-
-## After Review Loop (blocked on Greptile)
-
-- [ ] Run Greptile review loop on PR 1 — fix until 5/5
-      See: plans/PROMPT_grep-loop.md, reviews/PR_1_review_template.md
-      Risk: low
-
-- [ ] Merge `feature/validate-command` after Greptile 5/5 + human diff review
       Risk: low
 
 ## Backlog

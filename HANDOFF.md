@@ -6,71 +6,49 @@
 
 ---
 
-## Session: 2026-05-22 — Phase 3: post-feature cleanup + CI + review prep
+## Session: 2026-05-22 — Phase 3: grep loop (in progress)
 
-### What Was Built
-Completed the full Phase 3 task sheet (everything except external-blocker steps):
+### What Was Built / Completed This Session
+1. All support branches pushed to origin (chore/add-ci, chore/review-prep)
+2. Master synced to origin (state file updates pushed)
+3. State files updated to reflect current reality:
+   - CHANGELOG.md — Phase 3 CI + review prep entries added
+   - TASKS.md — grep loop as active task, completed items marked
+   - PROJECT_STATE.md — updated to Phase 3 grep loop state
+4. reviews/PR_1_review.md created — placeholder for Greptile feedback
 
-1. **validate command** (previous session) — `handoff-forge validate [target-dir]` on `feature/validate-command` branch. 5 new tests, 33 total passing. Branch pushed to GitHub.
-
-2. **Post-feature structure scan** — reviewed `file_ops.py` and `cli.py` after the validate command addition. Result: clean. No duplicated code, no misplaced logic.
-
-3. **CI workflow** — `.github/workflows/ci.yml` on `chore/add-ci` branch. Runs pytest on Python 3.11 and 3.12 on all push/PR events targeting master.
-
-4. **Review loop preparation** — `chore/review-prep` branch:
-   - `reviews/PR_1_review_template.md` — PR review checklist and Greptile score tracking table
-   - `plans/PROMPT_grep-loop.md` — session prompts for running the Greptile review loop
-
-5. **State files updated on master** — `TASKS.md` and `PROJECT_STATE.md` reflect Phase 3 progress and document all external blockers with exact URLs.
-
-Files changed this session:
-- `.github/workflows/ci.yml` — new (on `chore/add-ci` branch, local only)
-- `reviews/PR_1_review_template.md` — new (on `chore/review-prep` branch, local only)
-- `plans/PROMPT_grep-loop.md` — new (on `chore/review-prep` branch, local only)
-- `TASKS.md` — updated to Phase 3 state (on master)
-- `PROJECT_STATE.md` — updated to Phase 3 state (on master)
-- `HANDOFF.md` — this file (on master)
-
-Tests: 33/33 passing. All branches committed locally.
+### Current State
+- PR #1 (`feat: add validate command`) is open on GitHub
+- Greptile is connected and has posted a review on PR #1
+- All 33 tests passing on `feature/validate-command`
+- Branch is clean (empty trigger commit pushed to force Greptile re-review)
 
 ### What Is Not Finished
-Three external-blocker steps — all require browser:
+**Grep loop** — this is the active task. Greptile's review is posted on GitHub PR #1 but has not been pasted into the session. The loop cannot execute without the actual review content.
 
-1. **Push support branches** — two branches committed locally, not yet pushed:
-   ```
-   git push -u origin chore/add-ci
-   git push -u origin chore/review-prep
-   ```
-
-2. **PR open** — `feature/validate-command` already pushed. Open PR at:
-   `https://github.com/Abdilamir/handoff-forge/compare/master...feature/validate-command`
-
-3. **Greptile connection** — go to `https://greptile.com`, authorize GitHub, select `handoff-forge` repo
-
-4. **GitHub secret scanning** — GitHub Settings → Security → Secret scanning → Enable
-
-5. **Review loop** — after Greptile reviews PR 1, paste feedback into new session with the prompt from `plans/PROMPT_grep-loop.md`
-
-6. **Merge** — only after Greptile 5/5 + human diff review
+To continue: paste the Greptile review comment from PR #1 into the session. The loop will immediately evaluate each finding, fix agreed issues, push, and retrigger review.
 
 ### Decisions Made
-- CI runs on both 3.11 and 3.12 — catches version-specific edge cases at near-zero cost
-- `chore/add-ci` is a separate branch from `feature/validate-command` — keeps the feature PR focused
-- `REQUIRED_FILES` lives in cli.py, not services/ — it is command configuration, not service logic
+- `REQUIRED_FILES` lives in cli.py, not services/ — command configuration, not service logic (defend this if Greptile flags it)
+- `check_required_files` takes `required: list[str]` as a parameter — keeps it testable and flexible
+- No `--fix` flag in this PR — follow-up feature, keeping PR small
 
 ### Next Step
-1. Push support branches:
-   ```
-   git push -u origin chore/add-ci
-   git push -u origin chore/review-prep
-   ```
-2. Open PR in browser: `https://github.com/Abdilamir/handoff-forge/compare/master...feature/validate-command`
-3. Connect Greptile at `https://greptile.com`
-4. Run review loop using `plans/PROMPT_grep-loop.md`
+**Grep loop on PR #1:**
+1. Paste Greptile's review content here
+2. Evaluate each issue (agree/disagree)
+3. Fix agreed issues on `feature/validate-command`
+4. `python -m pytest --tb=short -q` — confirm 33 passing
+5. `git add -p && git commit -m "fix: [issue]"` — commit fixes
+6. `git push` — triggers Greptile re-review
+7. Repeat until 5/5
+8. Human diff review: `git diff master...feature/validate-command`
+9. Merge (requires approval)
 
 ### Known Risks
-- Greptile may flag `REQUIRED_FILES` living in cli.py — defensible (command configuration, not service logic)
+- Greptile may flag `REQUIRED_FILES` in cli.py — defensible, see Decisions Made above
+- Max 3 loop iterations before stopping to reassess if score not improving
 
 ---
 
-*Last updated: 2026-05-22 | Session: Phase 3 — post-feature cleanup, CI, review prep*
+*Last updated: 2026-05-22 | Session: Phase 3 — grep loop in progress*
