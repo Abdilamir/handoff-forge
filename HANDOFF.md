@@ -1,48 +1,37 @@
 # HANDOFF.md
 
-> This file is always a full rewrite — not an append.
-> It represents the current state of the project right now.
+> This file is the authoritative session state.
+> It is typically a full rewrite at session end; use --append for mid-session notes.
 > A fresh agent reads this first, before doing anything else.
 
 ---
 
-## Session: 2026-05-23 — PR #2 merged, feat/handoff-append in progress
+## Session: 2026-05-23 — PR #3 merge + docs/readme-append-flag
 
-### What Was Completed
-1. **PR #2 merged** — `fix: tasks insertion position`, Greptile 5/5 (Round 1: 4/5, Round 2: 5/5)
-   - Round 1 fixes: moved `insert_task_entry()` to `file_ops.py`, fixed TASK FORMAT-first edge case, added `---` separator test
-   - 42/42 tests passing at merge, restore/post-tasks-fix-merge tag created
-   - fix/tasks-insertion-position deleted locally and remotely
+### What Was Built
+- Merged PR #3 (feat/handoff-append) into master with --no-ff. Greptile 5/5 after Round 1 fixes (template header contradiction, backup accumulation on --append). 50 tests passing.
+- Created restore tag `restore/post-handoff-append-merge`.
+- Deleted feat/handoff-append local and remote.
+- Created `docs/readme-append-flag` branch and committed README update: added `--append` example with mutual-exclusion note, updated File Safety section, updated session-end loop example with mid-session checkpoint pattern.
+- Updated CHANGELOG.md, TASKS.md, PROJECT_STATE.md, HANDOFF.md on master.
 
-2. **feat/handoff-append** started immediately:
-   - Plan: `plans/PLAN_feat-handoff-append.md`
-   - `handoff_append_entry()` added to `templates.py`
-   - `--append` flag added to `handoff` subparser
-   - `cmd_handoff` handles: append+overwrite error, append+exists (note entry), append+no-file (full template)
-   - 3 new tests in `test_templates.py`, 3 new tests in `test_cli.py`
-   - 48/48 tests passing on branch (locally)
-
-### Active Task
-`feat/handoff-append` — implemented locally, not yet pushed.
-
-**What it does:** `handoff-forge handoff --session "..." --built "..." --next "..." --append`
-appends a compact dated note to the bottom of an existing HANDOFF.md instead of rewriting it.
+### What Is Not Finished
+- docs/readme-append-flag PR not yet opened (browser required).
+- chore/add-ci and chore/review-prep PRs not yet opened (browser required).
+- GitHub secret scanning not yet enabled (browser required).
 
 ### Decisions Made
-- `handoff_append_entry()` in templates.py (same layer as all other generators)
-- `--append` and `--overwrite` are mutually exclusive — runtime error if both set
-- Append on non-existent file falls through to full template create (safe default)
-- Compact format: `## Note: {date} — {session}` with `**Built:**` and `**Next:**` lines only
+- State files (CHANGELOG, TASKS, PROJECT_STATE, HANDOFF) committed directly to master, not bundled with feature branches — consistent with prior sessions.
+- README update isolated to docs/readme-append-flag so it gets a Greptile pass before merge.
 
 ### Next Step
-1. `git checkout feat/handoff-append && git stash pop` (resolve CHANGELOG conflict, keep master's version)
-2. `git push -u origin feat/handoff-append`
-3. Open PR: `https://github.com/Abdilamir/handoff-forge/compare/master...feat/handoff-append`
-4. Greptile review → fix until 5/5 → merge
+Open PR for `docs/readme-append-flag` at:
+https://github.com/Abdilamir/handoff-forge/compare/master...docs/readme-append-flag
+Then wait for Greptile review. If 5/5, merge with --no-ff, delete branch, update state files, then move to chore/add-ci PR.
 
 ### Known Risks
-- None in the implementation
+- None identified.
 
 ---
 
-*Last updated: 2026-05-23 | Session: PR #2 merged, feat/handoff-append 48 tests passing*
+*Last updated: 2026-05-23 | Session: PR #3 merge + docs/readme-append-flag*

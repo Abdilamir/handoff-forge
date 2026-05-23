@@ -3,10 +3,10 @@
 ---
 
 ## Current Phase
-Phase 4 — Feature iteration (handoff --append flag)
+Phase 4 — Feature iteration (README --append docs)
 
 ## Status
-feat/handoff-append implemented locally, 48 tests passing — awaiting push + PR + Greptile
+PR #3 merged (Greptile 5/5). docs/readme-append-flag pushed — awaiting PR + Greptile.
 
 ## Stack
 - Language: Python 3.11
@@ -18,21 +18,20 @@ feat/handoff-append implemented locally, 48 tests passing — awaiting push + PR
 ## What Is Done
 - [x] PR #1 merged: feat: add validate command (Greptile 5/5, 33 tests)
 - [x] PR #2 merged: fix: tasks insertion position (Greptile 5/5, 42 tests)
-- [x] restore/post-validate-merge + restore/post-tasks-fix-merge tags on origin
-- [x] fix branch deleted local + remote
-- [x] insert_task_entry() in file_ops.py (service layer enforced)
-- [x] tests/test_cli.py created (5 tests for cmd_tasks)
-- [x] feat/handoff-append: implemented, 48 tests passing
+- [x] PR #3 merged: feat: handoff --append flag (Greptile 5/5, 50 tests)
+- [x] restore/post-handoff-append-merge tag created
+- [x] feat/handoff-append deleted local + remote
+- [x] docs/readme-append-flag pushed to origin
 
 ## What Is In Progress
-- feat/handoff-append branch — locally complete, not yet pushed
+- docs/readme-append-flag — README --append flag documentation (pushed, PR pending)
 
 ## What Is Next
-1. Push feat/handoff-append and open PR
+1. Open PR for docs/readme-append-flag (browser)
 2. Greptile review loop → 5/5
-3. Merge feat/handoff-append
-4. Open PRs for chore/add-ci and chore/review-prep
-5. Enable GitHub secret scanning
+3. Merge docs/readme-append-flag
+4. Open PRs for chore/add-ci and chore/review-prep (browser)
+5. Enable GitHub secret scanning (browser)
 
 ## Known Issues
 - None
