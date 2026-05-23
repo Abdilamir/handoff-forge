@@ -5,6 +5,7 @@ from pathlib import Path
 
 from handoff_forge.services.file_ops import (
     backup_file,
+    check_required_files,
     ensure_directory,
     file_exists,
     read_file,
@@ -90,3 +91,35 @@ def test_file_exists_true(tmp_path):
 
 def test_file_exists_false(tmp_path):
     assert file_exists(tmp_path / "nope.md") is False
+
+
+# --- check_required_files ---
+
+def test_check_required_files_all_present(tmp_path):
+    for name in ["CLAUDE.md", "HANDOFF.md", "TASKS.md"]:
+        (tmp_path / name).write_text("x", encoding="utf-8")
+    result = check_required_files(tmp_path, ["CLAUDE.md", "HANDOFF.md", "TASKS.md"])
+    assert result == {"CLAUDE.md": True, "HANDOFF.md": True, "TASKS.md": True}
+
+
+def test_check_required_files_some_missing(tmp_path):
+    (tmp_path / "CLAUDE.md").write_text("x", encoding="utf-8")
+    result = check_required_files(tmp_path, ["CLAUDE.md", "HANDOFF.md"])
+    assert result["CLAUDE.md"] is True
+    assert result["HANDOFF.md"] is False
+
+
+def test_check_required_files_all_missing(tmp_path):
+    result = check_required_files(tmp_path, ["CLAUDE.md", "HANDOFF.md", "SECURITY.md"])
+    assert all(not present for present in result.values())
+
+
+def test_check_required_files_preserves_order(tmp_path):
+    files = ["CLAUDE.md", "HANDOFF.md", "TASKS.md"]
+    result = check_required_files(tmp_path, files)
+    assert list(result.keys()) == files
+
+
+def test_check_required_files_empty_list(tmp_path):
+    result = check_required_files(tmp_path, [])
+    assert result == {}

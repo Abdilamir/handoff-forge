@@ -63,3 +63,13 @@ def ensure_directory(path: Path) -> Path:
 
 def file_exists(path: Path) -> bool:
     return Path(path).exists()
+
+
+def check_required_files(directory: Path, required: list[str]) -> dict[str, bool]:
+    """
+    Check which required filenames exist directly inside directory.
+    Returns a dict mapping each filename to True (present) or False (missing).
+    Does not recurse into subdirectories.
+    """
+    directory = Path(directory)
+    return {name: (directory / name).exists() for name in required}

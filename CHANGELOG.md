@@ -2,7 +2,21 @@
 
 ---
 
-## 2026-05-22
+## 2026-05-22 — Phase 3
+
+### [2026-05-22] — feat: validate command
+- **Branch:** `feature/validate-command`
+- **PR:** pending Greptile review
+- **What:** Added `handoff-forge validate [target]` — checks for required OS files, prints status per file, exits 0 (all present) or 1 (any missing)
+- **Files changed:**
+  - `src/handoff_forge/services/file_ops.py` — added `check_required_files()`
+  - `src/handoff_forge/cli.py` — added `cmd_validate()`, `REQUIRED_FILES` constant, and validate subparser
+  - `tests/test_file_ops.py` — added 5 tests for `check_required_files`
+  - `README.md` — added validate command section with example output
+- **Tests added:** 5 new — 33 total passing
+- **Breaking changes:** None — purely additive
+
+---
 
 ### [2026-05-22] — Phase 3: CI + review loop infrastructure
 - **Branches:** `chore/add-ci`, `chore/review-prep` (pushed to origin)

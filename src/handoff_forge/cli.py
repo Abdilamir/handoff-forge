@@ -2,10 +2,11 @@
 handoff-forge CLI entry point.
 
 Subcommands:
-  init    — create HANDOFF.md, PROJECT_STATE.md, TASKS.md in a target directory
-  handoff — generate or overwrite HANDOFF.md with session notes
-  state   — update PROJECT_STATE.md
-  tasks   — append a task entry to TASKS.md
+  init     — create HANDOFF.md, PROJECT_STATE.md, TASKS.md in a target directory
+  handoff  — generate or overwrite HANDOFF.md with session notes
+  state    — update PROJECT_STATE.md
+  tasks    — append a task entry to TASKS.md
+  validate — check whether a project contains all required OS files
 """
 
 import argparse
@@ -13,6 +14,42 @@ import sys
 from pathlib import Path
 
 from handoff_forge.services import file_ops, templates
+
+
+REQUIRED_FILES = [
+    "CLAUDE.md",
+    "HANDOFF.md",
+    "TASKS.md",
+    "PROJECT_STATE.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+]
+
+
+def cmd_validate(args: argparse.Namespace) -> int:
+    target = Path(args.target).resolve()
+
+    if not target.is_dir():
+        print(f"Error: {target} is not a directory.", file=sys.stderr)
+        return 1
+
+    print(f"Validating: {target}\n")
+
+    results = file_ops.check_required_files(target, REQUIRED_FILES)
+
+    for filename, present in results.items():
+        status = "[OK]     " if present else "[MISSING]"
+        print(f"  {status} {filename}")
+
+    missing = [f for f, ok in results.items() if not ok]
+
+    print()
+    if missing:
+        print(f"{len(missing)} file(s) missing.")
+        return 1
+
+    print("All required files present.")
+    return 0
 
 
 def cmd_init(args: argparse.Namespace) -> int:
@@ -191,6 +228,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_tasks.add_argument("--phase", help="Phase name (used only when creating a new TASKS.md)")
     p_tasks.add_argument("--target", default=".", help="Directory containing TASKS.md (default: .)")
     p_tasks.set_defaults(func=cmd_tasks)
+
+    # validate
+    p_validate = sub.add_parser("validate", help="Check whether a project contains all required OS files")
+    p_validate.add_argument("target", nargs="?", default=".", help="Project directory to validate (default: current directory)")
+    p_validate.set_defaults(func=cmd_validate)
 
     return parser
 
