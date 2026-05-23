@@ -29,12 +29,12 @@ def backup_file(path: Path) -> Path:
     return backup_path
 
 
-def write_file(path: Path, content: str, *, overwrite: bool = False) -> Path:
+def write_file(path: Path, content: str, *, overwrite: bool = False, backup: bool = True) -> Path:
     """
     Write content to path.
 
     If the file exists and overwrite=False, raises FileExistsError.
-    If the file exists and overwrite=True, backs it up before writing.
+    If the file exists and overwrite=True, backs it up before writing unless backup=False.
     Creates parent directories if they do not exist.
 
     Returns the path written to.
@@ -48,7 +48,8 @@ def write_file(path: Path, content: str, *, overwrite: bool = False) -> Path:
                 f"{path} already exists. Use overwrite=True to replace it "
                 f"(a backup will be created automatically)."
             )
-        backup_file(path)
+        if backup:
+            backup_file(path)
 
     path.write_text(content, encoding="utf-8")
     return path

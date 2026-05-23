@@ -19,8 +19,8 @@ def handoff_template(
     return f"""\
 # HANDOFF.md
 
-> This file is always a full rewrite — not an append.
-> It represents the current state of the project right now.
+> This file is the authoritative session state.
+> It is typically a full rewrite at session end; use --append for mid-session notes.
 > A fresh agent reads this first, before doing anything else.
 
 ---
@@ -131,3 +131,13 @@ def tasks_template(
 def task_entry(description: str) -> str:
     """Format a single task line for appending to TASKS.md."""
     return f"- [ ] {description}"
+
+
+def handoff_append_entry(
+    session: str,
+    what_built: str,
+    next_step: str,
+    updated: str | None = None,
+) -> str:
+    today = updated or date.today().isoformat()
+    return f"\n---\n\n## Note: {today} — {session}\n\n**Built:** {what_built}\n**Next:** {next_step}\n"

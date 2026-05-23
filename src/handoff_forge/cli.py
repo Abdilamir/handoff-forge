@@ -111,6 +111,21 @@ def cmd_handoff(args: argparse.Namespace) -> int:
     target = Path(args.target).resolve()
     path = target / "HANDOFF.md"
 
+    if args.append and args.overwrite:
+        print("Error: --append and --overwrite are mutually exclusive.", file=sys.stderr)
+        return 1
+
+    if args.append and file_ops.file_exists(path):
+        existing = file_ops.read_file(path) or ""
+        note = templates.handoff_append_entry(
+            session=args.session,
+            what_built=args.built,
+            next_step=args.next,
+        )
+        result = file_ops.write_file(path, existing.rstrip() + note, overwrite=True, backup=False)
+        print(f"Appended note to: {result}")
+        return 0
+
     content = templates.handoff_template(
         session=args.session,
         what_built=args.built,
@@ -202,6 +217,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_handoff.add_argument("--risks", help="Known risks (optional)")
     p_handoff.add_argument("--target", default=".", help="Directory containing HANDOFF.md (default: .)")
     p_handoff.add_argument("--overwrite", action="store_true", help="Overwrite existing HANDOFF.md (creates backup)")
+    p_handoff.add_argument("--append", action="store_true", help="Append a compact note to existing HANDOFF.md instead of full rewrite")
     p_handoff.set_defaults(func=cmd_handoff)
 
     # state

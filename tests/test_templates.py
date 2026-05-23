@@ -1,6 +1,7 @@
 """Tests for template generators."""
 
 from handoff_forge.services.templates import (
+    handoff_append_entry,
     handoff_template,
     project_state_template,
     task_entry,
@@ -80,6 +81,18 @@ class TestHandoffTemplate:
         )
         assert "*Last updated: 2026-05-22 | Session: Deploy step*" in result
 
+    def test_header_acknowledges_append(self):
+        result = handoff_template(
+            session="S",
+            what_built="x",
+            not_finished="x",
+            decisions="x",
+            next_step="x",
+            risks="x",
+        )
+        assert "authoritative session state" in result
+        assert "always a full rewrite" not in result
+
 
 class TestProjectStateTemplate:
     def test_contains_phase(self):
@@ -151,6 +164,21 @@ class TestTasksTemplate:
     def test_starts_with_heading(self):
         result = tasks_template(phase="P1", tasks=[])
         assert result.startswith("# TASKS.md")
+
+
+class TestHandoffAppendEntry:
+    def test_contains_session_name(self):
+        result = handoff_append_entry("Mid-session", "Fixed bug", "Next step")
+        assert "Mid-session" in result
+
+    def test_contains_built_and_next(self):
+        result = handoff_append_entry("S", "Built X", "Do Y")
+        assert "Built X" in result
+        assert "Do Y" in result
+
+    def test_starts_with_separator(self):
+        result = handoff_append_entry("S", "B", "N")
+        assert result.startswith("\n---\n")
 
 
 class TestTaskEntry:
