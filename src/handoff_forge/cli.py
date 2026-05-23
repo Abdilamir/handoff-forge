@@ -163,13 +163,7 @@ def cmd_tasks(args: argparse.Namespace) -> int:
 
     if file_ops.file_exists(path):
         existing = file_ops.read_file(path) or ""
-        # Append before the task format section if present, otherwise at end
-        marker = "## TASK FORMAT"
-        if marker in existing:
-            insert_at = existing.index(marker)
-            updated = existing[:insert_at].rstrip() + f"\n{entry}\n\n" + existing[insert_at:]
-        else:
-            updated = existing.rstrip() + f"\n{entry}\n"
+        updated = file_ops.insert_task_entry(existing, entry)
         file_ops.write_file(path, updated, overwrite=True)
     else:
         # No existing file — create a minimal one with this task
