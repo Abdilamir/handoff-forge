@@ -43,7 +43,7 @@ handoff-forge init ./my-project --overwrite
 
 ### `handoff` — Generate or update HANDOFF.md
 
-Writes a complete, structured HANDOFF.md from your session notes. Use this at the end of every coding session.
+Writes a complete, structured HANDOFF.md from your session notes. Use at the end of a session for a full rewrite, or with `--append` for a compact mid-session checkpoint.
 
 ```bash
 handoff-forge handoff \
@@ -59,7 +59,16 @@ handoff-forge handoff --session "..." --built "..." --next "..." --target ./my-p
 
 # Overwrite an existing HANDOFF.md (backup created automatically)
 handoff-forge handoff --session "..." --built "..." --next "..." --overwrite
+
+# Append a compact mid-session note without overwriting the full file
+handoff-forge handoff \
+  --session "Auth feature — mid-session checkpoint" \
+  --built "Login endpoint done, refresh endpoint 50% complete" \
+  --next "Finish refresh endpoint — token signing logic in auth/tokens.py" \
+  --append
 ```
+
+`--append` adds a compact `## Note:` block to the bottom of an existing HANDOFF.md. If no HANDOFF.md exists, it creates a full file. `--append` and `--overwrite` are mutually exclusive.
 
 ---
 
@@ -146,7 +155,7 @@ Validating: /path/to/my-project
 ## File Safety
 
 - **Default behavior:** `init` skips files that already exist. `handoff` and `state` require `--overwrite` to replace existing files.
-- **Backups:** When `--overwrite` is used, the existing file is copied to `<filename>.bak.<YYYYMMDD-HHMMSS>` in the same directory before being replaced.
+- **Backups:** When `--overwrite` is used, the existing file is copied to `<filename>.bak.<YYYYMMDD-HHMMSS>` in the same directory before being replaced. `--append` never creates backups — it only extends the file.
 - **No network access:** All commands are fully local. No API calls, no accounts, no telemetry.
 
 ---
@@ -171,7 +180,10 @@ python -m pytest tests/test_file_ops.py -v
 This tool is part of the [agentic-engineering-os](../agentic-engineering-os) workflow. The intended loop:
 
 ```
-END OF SESSION:
+MID-SESSION CHECKPOINT:
+  handoff-forge handoff --session "..." --built "..." --next "..." --append
+
+END OF SESSION (full rewrite):
   handoff-forge handoff --session "..." --built "..." --next "..."
 
 START OF NEXT SESSION (Claude Code prompt):
