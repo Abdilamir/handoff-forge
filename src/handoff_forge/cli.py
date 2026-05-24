@@ -235,6 +235,15 @@ def cmd_agents_init(args: argparse.Namespace) -> int:
 def cmd_agent_brief(args: argparse.Namespace) -> int:
     target = Path(args.target).resolve()
     role = args.role.lower()
+
+    if role not in AGENT_ROLES:
+        print(
+            f"Error: '{role}' is not a recognised agent role.\n"
+            f"Valid roles: {', '.join(AGENT_ROLES)}",
+            file=sys.stderr,
+        )
+        return 1
+
     role_path = target / "agents" / f"{role}.md"
 
     if not file_ops.file_exists(role_path):

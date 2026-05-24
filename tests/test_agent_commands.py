@@ -105,6 +105,13 @@ class TestAgentBrief:
         assert "not found" in err
         assert "agents init" in err
 
+    def test_returns_error_for_unrecognised_role(self, tmp_path, capsys):
+        result = cmd_agent_brief(_agent_brief_args("devops", str(tmp_path)))
+        assert result == 1
+        err = capsys.readouterr().err
+        assert "not a recognised agent role" in err
+        assert "devops" in err
+
 
 # ---------------------------------------------------------------------------
 # next
@@ -187,6 +194,12 @@ class TestTemplateHelpers:
         content = "## Current Phase\nPhase 7\n\n## Status\nGreen\n"
         result = templates._extract_section(content, "## Current Phase")
         assert result == "Phase 7"
+
+    def test_extract_section_stops_at_same_level_subheader(self):
+        content = "### Next Step\nDo the thing\n\n### Known Risks\nSome risk\n"
+        result = templates._extract_section(content, "### Next Step")
+        assert result == "Do the thing"
+        assert "Known Risks" not in result
 
     def test_extract_section_returns_none_for_missing_header(self):
         assert templates._extract_section("## Other\nstuff\n", "## Missing") is None

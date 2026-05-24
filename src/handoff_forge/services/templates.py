@@ -364,18 +364,24 @@ def checkpoint_entry(
 # ---------------------------------------------------------------------------
 
 def _extract_section(content: str | None, header: str) -> str | None:
-    """Return the text of the first section matching header, up to the next ## header."""
+    """Return the text of the first section matching header, stopping at any same-or-higher-level header."""
     if not content:
         return None
+    stripped_header = header.strip()
+    target_level = len(stripped_header) - len(stripped_header.lstrip("#"))
     lines = content.splitlines()
     in_section = False
     collected: list[str] = []
     for line in lines:
-        if line.strip() == header.strip():
+        if line.strip() == stripped_header:
             in_section = True
             continue
         if in_section:
-            if line.startswith("## ") or line.startswith("---"):
+            if line.startswith("---"):
+                break
+            lstripped = line.lstrip("#")
+            line_level = len(line) - len(lstripped)
+            if line_level > 0 and len(line) > line_level and line[line_level] == " " and line_level <= target_level:
                 break
             collected.append(line)
     text = "\n".join(collected).strip()
