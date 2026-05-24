@@ -1,7 +1,6 @@
 """Tests for file_ops service."""
 
 import pytest
-from pathlib import Path
 
 from handoff_forge.services.file_ops import (
     backup_file,

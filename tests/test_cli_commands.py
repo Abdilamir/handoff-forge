@@ -1,7 +1,6 @@
 """Tests for cmd_init, cmd_state, cmd_validate, and cmd_handoff full-rewrite path."""
 
 import argparse
-from pathlib import Path
 
 from handoff_forge.cli import cmd_handoff, cmd_init, cmd_state, cmd_validate
 
@@ -79,6 +78,22 @@ class TestCmdInit:
     def test_returns_zero_on_success(self, tmp_path):
         assert cmd_init(_init_args(str(tmp_path))) == 0
 
+    def test_handoff_md_contains_expected_sections(self, tmp_path):
+        cmd_init(_init_args(str(tmp_path)))
+        content = (tmp_path / "HANDOFF.md").read_text(encoding="utf-8")
+        assert "# HANDOFF.md" in content
+        assert "Project initialized" in content
+
+    def test_project_state_md_contains_phase(self, tmp_path):
+        cmd_init(_init_args(str(tmp_path)))
+        content = (tmp_path / "PROJECT_STATE.md").read_text(encoding="utf-8")
+        assert "Phase 1" in content
+
+    def test_tasks_md_contains_header(self, tmp_path):
+        cmd_init(_init_args(str(tmp_path)))
+        content = (tmp_path / "TASKS.md").read_text(encoding="utf-8")
+        assert "# TASKS.md" in content
+
 
 # --- cmd_validate ---
 
@@ -97,6 +112,23 @@ class TestCmdValidate:
 
     def test_returns_one_for_nonexistent_directory(self, tmp_path):
         assert cmd_validate(_validate_args(str(tmp_path / "ghost"))) == 1
+
+    def test_output_marks_present_files_ok(self, tmp_path, capsys):
+        for name in ["CLAUDE.md", "HANDOFF.md", "TASKS.md", "PROJECT_STATE.md", "CHANGELOG.md", "SECURITY.md"]:
+            (tmp_path / name).write_text("x", encoding="utf-8")
+        cmd_validate(_validate_args(str(tmp_path)))
+        out = capsys.readouterr().out
+        assert "[OK]" in out
+        assert "[MISSING]" not in out
+        assert "All required files present." in out
+
+    def test_output_marks_missing_files(self, tmp_path, capsys):
+        (tmp_path / "CLAUDE.md").write_text("x", encoding="utf-8")
+        cmd_validate(_validate_args(str(tmp_path)))
+        out = capsys.readouterr().out
+        assert "[OK]" in out
+        assert "[MISSING]" in out
+        assert "file(s) missing." in out
 
 
 # --- cmd_state ---
@@ -159,3 +191,11 @@ class TestCmdHandoffFullRewrite:
         assert "Full rewrite session" in content
         backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
         assert len(backups) == 1
+
+    def test_backup_preserves_original_content(self, tmp_path):
+        (tmp_path / "HANDOFF.md").write_text("original session notes", encoding="utf-8")
+        result = cmd_handoff(_handoff_args(str(tmp_path), overwrite=True))
+        assert result == 0
+        backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+        assert len(backups) == 1
+        assert backups[0].read_text(encoding="utf-8") == "original session notes"
