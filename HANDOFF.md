@@ -4,48 +4,47 @@
 
 ---
 
-## Session: 2026-05-24 — Phase 6 Complete / Phase 7 Start
+## Session: 2026-05-24 — Phase 7 (PyPI & Release Prep)
 
 ---
 
 ## What Was Built This Session
 
-**PR #17 merged (Greptile 5/5):**
-- `chore/ruff-config` — `[tool.ruff]` config in pyproject.toml (line-length=120, target-version=py311, select=E/F/W/I), CI ruff step gated to `matrix.python-version == '3.11'`, mechanical lint fixes across cli.py and test files.
-- Greptile rounds: 3/5 (dep conflict) → 4/5 (redundant matrix runs) → 5/5 (gated to py3.11)
-- Restore tag: `restore/after-pr17-merge`
+**PR #18 merged (Greptile 5/5):**
+- `chore/version-bump-workflow` — bumped version to `0.1.1` in `pyproject.toml` and `__init__.py`. Added `## Release History` section to CHANGELOG with a `[0.1.1]` semver entry and pre-release checklist.
+- Restore tag: `restore/after-pr18-merge`
 
-**Phase 6 (Developer Experience) is now complete.**
-All 17 PRs merged, all Greptile 5/5. 78 tests passing.
+**PR #19 open (awaiting Greptile review):**
+- `chore/pip-audit` — adds `audit` CI job (separate from test matrix, runs on py3.11 only). Installs pip-audit, runs `pip-audit` against full dev environment. Adds `## Dependency Audit` section to SECURITY.md.
+- Rebased onto master after PR #18 merge.
 
 ---
 
 ## What Was Not Finished
 
-- Phase 7 tasks not yet started (queued, no blockers)
+- PR #19 pending Greptile review and merge.
 
 ---
 
 ## Key Decisions
 
-- **Ruff CI gated to py3.11**: Greptile 4/5 finding was that ruff ran identically on all 3 matrix entries (behavior is version-agnostic, controlled by target-version not runtime). Fixed with `if: matrix.python-version == '3.11'`. This is the correct pattern for linting in a multi-version matrix.
-- **Merge without final Greptile re-review wait**: After fixing the 4/5 concern (redundant runs), Greptile had already posted a 5/5 review on commit `582fe11` before this note was written. The review confirmed "Safe to merge — all changes are purely additive tooling config and cosmetic code fixes."
+- **pip-audit as a separate CI job**: Not added to the test matrix (audit is version-agnostic). Runs once on py3.11. This mirrors the pattern used for the ruff lint step.
+- **pip-audit not added to dev deps**: It is a CI-only tool. Keeping dev deps minimal (pytest + ruff only).
+- **Version bump both locations**: `pyproject.toml` and `src/handoff_forge/__init__.py` must stay in sync since `--version` reads from `__version__`.
 
 ---
 
 ## Exact Next Step
 
-1. Start Phase 7 — branch `chore/version-bump-workflow`:
-   - Add CHANGELOG release entry format (semver header: `## [0.1.1] — YYYY-MM-DD`)
-   - Bump `pyproject.toml` version from `0.1.0` to `0.1.1`
-   - Files: `pyproject.toml`, `CHANGELOG.md`
-2. Then `chore/pip-audit`:
-   - Add `pip-audit` step to CI (pre-release job or new workflow step)
-   - Document audit policy in `SECURITY.md`
-3. Enable GitHub secret scanning (browser action)
+1. Wait for Greptile review on PR #19 (chore/pip-audit)
+2. If 5/5: merge no-ff, push master, tag `restore/after-pr19-merge`, delete branch
+3. Update CHANGELOG (PR #19 entry), TASKS, PROJECT_STATE, HANDOFF
+4. Enable GitHub secret scanning — browser action at https://github.com/Abdilamir/handoff-forge/settings/security_analysis
+5. PyPI publish when ready (manual step)
 
 ---
 
 ## Risks
 
-- None. Master is clean. 78 tests green. ruff clean. CI fully green.
+- pip-audit CI job: if pytest or ruff have a current CVE, the audit job will fail. Unlikely but possible. Fix: bump affected dep.
+- PR #19 was rebased after PR #18 merged — force-pushed to origin. Greptile re-review triggered automatically by the push.

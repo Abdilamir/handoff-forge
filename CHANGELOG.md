@@ -29,6 +29,17 @@ Initial working release: 5 commands, stdlib only, 28 tests.
 
 ---
 
+### [2026-05-24] — chore: bump version to 0.1.1 and add release history to CHANGELOG (PR #18) — MERGED
+- **Branch:** `chore/version-bump-workflow`
+- **Greptile:** 5/5
+- **What:** Bumped `pyproject.toml` and `src/handoff_forge/__init__.py` from `0.1.0` to `0.1.1`. Added `## Release History` section to CHANGELOG with a `[0.1.1]` semver entry summarizing the release and a pre-release checklist (build, twine check, upload, GitHub Release tag).
+- **Files changed:** `pyproject.toml`, `src/handoff_forge/__init__.py`, `CHANGELOG.md`
+- **Tests:** 78 (unchanged)
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr18-merge`
+
+---
+
 ### [2026-05-24] — chore: add ruff linting to dev deps and CI (PR #17) — MERGED
 - **Branch:** `chore/ruff-config`
 - **Greptile:** Round 1: 3/5 (ruff dep conflict) → Round 2: 4/5 (redundant matrix runs) → Round 3: 5/5

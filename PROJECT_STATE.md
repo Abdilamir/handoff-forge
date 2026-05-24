@@ -6,7 +6,7 @@
 Phase 7 — PyPI & Release Prep
 
 ## Status
-17 PRs merged, all Greptile 5/5. 78 tests passing. CI runs on Python 3.11/3.12/3.13 with ruff enforced on 3.11.
+18 PRs merged, all Greptile 5/5. 78 tests passing. CI runs on Python 3.11/3.12/3.13 with ruff enforced on 3.11. Version 0.1.1. PR #19 (pip-audit) open.
 
 ## Stack
 - Language: Python 3.11+
@@ -34,19 +34,19 @@ Phase 7 — PyPI & Release Prep
 - [x] PR #15: test: validate output, init content, handoff backup coverage (Greptile 5/5, 78 tests)
 - [x] PR #16: chore: Makefile (install/test/lint/clean) + ruff in dev deps (Greptile 5/5)
 - [x] PR #17: chore: [tool.ruff] config + CI ruff enforcement (gated to py3.11) (Greptile 5/5)
+- [x] PR #18: chore: version bump to 0.1.1 + release history section in CHANGELOG (Greptile 5/5)
 - [x] 12 restore tags created
 - [x] .gitignore with security patterns
 - [x] SECURITY.md — public disclosure policy
 - [x] ruff>=0.4 in dev deps, [tool.ruff] configured with line-length=120, enforced on CI
 
 ## What Is In Progress
-- None
+- PR #19 (chore/pip-audit): pip-audit CI job + SECURITY.md documentation — awaiting Greptile review
 
 ## What Is Next
-- Phase 7 (PyPI & Release):
-  - chore/version-bump-workflow — CHANGELOG entry format for releases, bump to v0.1.1
-  - chore/pip-audit — pip-audit in CI pre-release check, documented in SECURITY.md
-  - Enable GitHub secret scanning (browser action required)
+- Merge PR #19 after Greptile 5/5
+- Enable GitHub secret scanning (browser action required)
+- PyPI publish: `python -m build && twine check dist/* && twine upload dist/*`
 
 ## Known Issues
 - None

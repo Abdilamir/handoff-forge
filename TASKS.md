@@ -13,11 +13,7 @@
 
 ## Queue — Phase 7 (PyPI & Release Prep)
 
-- [ ] chore/version-bump-workflow — add CHANGELOG entry format for releases, bump pyproject.toml version to 0.1.1
-      Files: pyproject.toml, CHANGELOG.md
-      Risk: low
-
-- [ ] chore/pip-audit — add pip-audit to CI pre-release check, document in SECURITY.md
+- [ ] chore/pip-audit — add pip-audit to CI pre-release check, document in SECURITY.md — PR #19 open, awaiting Greptile
       Files: .github/workflows/ci.yml, SECURITY.md
       Risk: low
 
@@ -40,6 +36,7 @@
 - [x] PR #15 merged: test: coverage gaps (validate output, init content, handoff backup) (Greptile 5/5)
 - [x] PR #16 merged: chore: Makefile + ruff in dev deps (Greptile 5/5)
 - [x] PR #17 merged: chore: ruff config + CI enforcement (Greptile 5/5)
+- [x] PR #18 merged: chore: version bump to 0.1.1 + release history in CHANGELOG (Greptile 5/5)
 
 ## TASK FORMAT
 
