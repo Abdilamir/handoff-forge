@@ -4,7 +4,6 @@ import argparse
 
 from handoff_forge.cli import cmd_handoff, cmd_init, cmd_state, cmd_validate
 
-
 # --- helpers ---
 
 def _init_args(target: str, *, overwrite: bool = False) -> argparse.Namespace:

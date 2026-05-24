@@ -16,7 +16,6 @@ from pathlib import Path
 from handoff_forge import __version__
 from handoff_forge.services import file_ops, templates
 
-
 REQUIRED_FILES = [
     "CLAUDE.md",
     "HANDOFF.md",
