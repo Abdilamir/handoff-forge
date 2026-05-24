@@ -2,6 +2,59 @@
 
 ---
 
+## 2026-05-24
+
+### [2026-05-24] — chore: expand CI matrix and fix branch trigger patterns (PR #11) — MERGED
+- **Branch:** `chore/ci-expand`
+- **Greptile:** 5/5
+- **What:** Expanded CI Python matrix to include 3.13; added `docs/**` and `test/**` branch triggers to match all naming conventions in use.
+- **Files changed:** `.github/workflows/ci.yml`
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr11-pr12-merge`
+
+---
+
+### [2026-05-24] — fix: replace placeholder repo URL in README (PR #12) — MERGED
+- **Branch:** `fix/readme-repo-url`
+- **Greptile:** 5/5
+- **What:** Replaced `<your-username>` placeholder in README clone URL with the actual `Abdilamir/handoff-forge` URL.
+- **Files changed:** `README.md`
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr11-pr12-merge`
+
+---
+
+### [2026-05-24] — fix: suppress spurious backups in cmd_init and cmd_tasks (PR #7) — MERGED
+- **Branch:** `fix/backup-call-sites`
+- **Greptile:** Round 1: 4/5 → Round 2: 5/5
+- **What:** `cmd_init --overwrite` was double-backing-up each file (explicit `backup_file()` call + `write_file` default `backup=True`). `cmd_tasks` created a backup on every task addition despite the operation being purely additive. Fixed by passing `backup=False` to affected `write_file` calls. Added 3 backup-hygiene tests including all-three-files overwrite coverage.
+- **Files changed:** `src/handoff_forge/cli.py`, `tests/test_cli.py`
+- **Tests:** 3 new — 53 total passing
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr7-pr8-pr9-merge`
+
+---
+
+### [2026-05-24] — chore: add .gitignore with security patterns (PR #8) — MERGED
+- **Branch:** `chore/add-gitignore`
+- **Greptile:** Round 1: 3/5 → Round 2: 5/5
+- **What:** Added `.gitignore` with Python, virtual environment, test, distribution, and editor patterns. Crucially added `.env`, `.env.*`, `*.pem`, `*.key` (security regression from initial draft), `open-source/` exclusion, and `*.bak.*.md` pattern matching `backup_file()` output format. Rewrote without UTF-8 BOM.
+- **Files changed:** `.gitignore`
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr7-pr8-pr9-merge`
+
+---
+
+### [2026-05-24] — chore: add SECURITY.md and source --version from __version__ (PR #9) — MERGED
+- **Branch:** `chore/project-hygiene`
+- **Greptile:** Round 1: 4/5 → Round 2: 5/5
+- **What:** Replaced internal-checklist SECURITY.md with a standard public security policy (supported versions table, disclosure channel, security properties). Sourced `--version` from `handoff_forge.__version__` to keep version DRY. Fixed UTF-8 BOM in SECURITY.md.
+- **Files changed:** `SECURITY.md`, `src/handoff_forge/cli.py`
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr7-pr8-pr9-merge`
+
+---
+
 ## 2026-05-23
 
 ### [2026-05-23] — chore: review loop preparation files (PR #6) — MERGED
