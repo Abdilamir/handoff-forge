@@ -2,11 +2,15 @@
 handoff-forge CLI entry point.
 
 Subcommands:
-  init     — create HANDOFF.md, PROJECT_STATE.md, TASKS.md in a target directory
-  handoff  — generate or overwrite HANDOFF.md with session notes
-  state    — update PROJECT_STATE.md
-  tasks    — append a task entry to TASKS.md
-  validate — check whether a project contains all required OS files
+  init          — create HANDOFF.md, PROJECT_STATE.md, TASKS.md in a target directory
+  handoff       — generate or overwrite HANDOFF.md with session notes
+  state         — update PROJECT_STATE.md
+  tasks         — append a task entry to TASKS.md
+  validate      — check whether a project contains all required OS files
+  agents init   — create agents/ directory with default role specs
+  agent brief   — print a role brief with current project context
+  next          — print the next recommended action from state files
+  checkpoint    — append a timestamped checkpoint to HANDOFF.md
 """
 
 import argparse
@@ -24,6 +28,8 @@ REQUIRED_FILES = [
     "CHANGELOG.md",
     "SECURITY.md",
 ]
+
+AGENT_ROLES = list(templates.AGENT_ROLES.keys())
 
 
 def cmd_validate(args: argparse.Namespace) -> int:
@@ -193,6 +199,107 @@ def cmd_tasks(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_agents_init(args: argparse.Namespace) -> int:
+    target = Path(args.target).resolve()
+    agents_dir = target / "agents"
+    file_ops.ensure_directory(agents_dir)
+
+    created, skipped, backed_up = [], [], []
+
+    for role, content in templates.AGENT_ROLES.items():
+        path = agents_dir / f"{role}.md"
+        if file_ops.file_exists(path):
+            if args.overwrite:
+                backup = file_ops.backup_file(path)
+                file_ops.write_file(path, content, overwrite=True, backup=False)
+                backed_up.append(f"  agents/{role}.md (backup: {backup.name})")
+            else:
+                skipped.append(f"  agents/{role}.md — already exists, use --overwrite to replace")
+        else:
+            file_ops.write_file(path, content)
+            created.append(f"  agents/{role}.md")
+
+    if created:
+        print(f"Created in {agents_dir}:")
+        print("\n".join(created))
+    if backed_up:
+        print(f"Replaced (with backup) in {agents_dir}:")
+        print("\n".join(backed_up))
+    if skipped:
+        print("Skipped (already exist):")
+        print("\n".join(skipped))
+
+    return 0
+
+
+def cmd_agent_brief(args: argparse.Namespace) -> int:
+    target = Path(args.target).resolve()
+    role = args.role.lower()
+
+    if role not in AGENT_ROLES:
+        print(
+            f"Error: '{role}' is not a recognised agent role.\n"
+            f"Valid roles: {', '.join(AGENT_ROLES)}",
+            file=sys.stderr,
+        )
+        return 1
+
+    role_path = target / "agents" / f"{role}.md"
+
+    if not file_ops.file_exists(role_path):
+        print(
+            f"Error: agents/{role}.md not found in {target}.\n"
+            f"Run 'handoff-forge agents init' to create default role specs.",
+            file=sys.stderr,
+        )
+        return 1
+
+    role_content = file_ops.read_file(role_path) or ""
+    state_content = file_ops.read_file(target / "PROJECT_STATE.md")
+    handoff_content = file_ops.read_file(target / "HANDOFF.md")
+
+    print(templates.agent_brief_output(role, role_content, state_content, handoff_content))
+    return 0
+
+
+def cmd_next(args: argparse.Namespace) -> int:
+    target = Path(args.target).resolve()
+    handoff_content = file_ops.read_file(target / "HANDOFF.md")
+    tasks_content = file_ops.read_file(target / "TASKS.md")
+    state_content = file_ops.read_file(target / "PROJECT_STATE.md")
+
+    if not any([handoff_content, tasks_content, state_content]):
+        print(
+            "Error: no state files found. Run 'handoff-forge init' first.",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(templates.next_action_output(handoff_content, tasks_content, state_content))
+    return 0
+
+
+def cmd_checkpoint(args: argparse.Namespace) -> int:
+    target = Path(args.target).resolve()
+    path = target / "HANDOFF.md"
+
+    entry = templates.checkpoint_entry(
+        task=args.task,
+        next_step=args.next,
+        branch=args.branch,
+        notes=args.notes,
+    )
+
+    if file_ops.file_exists(path):
+        existing = file_ops.read_file(path) or ""
+        file_ops.write_file(path, existing.rstrip() + entry, overwrite=True, backup=False)
+    else:
+        file_ops.write_file(path, entry.lstrip())
+
+    print(f"Checkpoint appended to: {path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="handoff-forge",
@@ -248,6 +355,38 @@ def build_parser() -> argparse.ArgumentParser:
         "target", nargs="?", default=".", help="Project directory to validate (default: current directory)",
     )
     p_validate.set_defaults(func=cmd_validate)
+
+    # agents (with sub-subcommand: init)
+    p_agents = sub.add_parser("agents", help="Manage agent role specifications")
+    agents_sub = p_agents.add_subparsers(dest="agents_action", required=True)
+    p_agents_init = agents_sub.add_parser("init", help="Create agents/ directory with default role specs")
+    p_agents_init.add_argument("target", nargs="?", default=".", help="Target directory (default: current directory)")
+    p_agents_init.add_argument("--overwrite", action="store_true", help="Replace existing role files (creates backups)")
+    p_agents_init.set_defaults(func=cmd_agents_init)
+
+    # agent (with sub-subcommand: brief)
+    p_agent = sub.add_parser("agent", help="Agent role operations")
+    agent_sub = p_agent.add_subparsers(dest="agent_action", required=True)
+    p_agent_brief = agent_sub.add_parser("brief", help="Print a role brief with current project context")
+    p_agent_brief.add_argument(
+        "role", help=f"Agent role ({', '.join(AGENT_ROLES)})",
+    )
+    p_agent_brief.add_argument("--target", default=".", help="Project directory (default: current directory)")
+    p_agent_brief.set_defaults(func=cmd_agent_brief)
+
+    # next
+    p_next = sub.add_parser("next", help="Print the next recommended action from state files")
+    p_next.add_argument("--target", default=".", help="Project directory (default: current directory)")
+    p_next.set_defaults(func=cmd_next)
+
+    # checkpoint
+    p_checkpoint = sub.add_parser("checkpoint", help="Append a timestamped checkpoint to HANDOFF.md")
+    p_checkpoint.add_argument("--task", required=True, help="Description of the active task")
+    p_checkpoint.add_argument("--next", required=True, help="Exact next step after this checkpoint")
+    p_checkpoint.add_argument("--branch", help="Current git branch (optional)")
+    p_checkpoint.add_argument("--notes", help="Additional notes for this checkpoint (optional)")
+    p_checkpoint.add_argument("--target", default=".", help="Project directory (default: current directory)")
+    p_checkpoint.set_defaults(func=cmd_checkpoint)
 
     return parser
 
