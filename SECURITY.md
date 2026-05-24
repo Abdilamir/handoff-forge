@@ -23,6 +23,12 @@ You will receive a response within 72 hours. If the issue is confirmed, a
 patched release will be published and the advisory will be made public after
 a reasonable disclosure window.
 
+## Dependency Audit
+
+All dependencies (runtime and dev) are scanned for known vulnerabilities on every CI run using [pip-audit](https://github.com/pypa/pip-audit). The `audit` job in `.github/workflows/ci.yml` installs the full dev environment and runs `pip-audit` against it.
+
+handoff-forge has zero runtime dependencies. Any finding would come from a dev dependency (pytest, ruff) with a known CVE — in that case the fix is to bump the affected dep in `pyproject.toml`.
+
 ## Security Properties of This Tool
 
 - **No network access:** all commands are fully local
