@@ -5,13 +5,7 @@
 
 ---
 
-## Browser Actions Required (unblocked — no active code task)
-
-- [ ] Open PR for `chore/review-prep` → merge to master
-      Branch: chore/review-prep (on origin)
-      Contents: reviews/PR_1_review_template.md, plans/PROMPT_grep-loop.md
-      URL: https://github.com/Abdilamir/handoff-forge/compare/master...chore/review-prep
-      Risk: low
+## Browser Action Required
 
 - [ ] Enable GitHub secret scanning
       URL: https://github.com/Abdilamir/handoff-forge/settings/security_analysis
@@ -24,6 +18,9 @@
 - [x] PR #3 merged: feat: handoff --append flag (Greptile 5/5)
 - [x] PR #4 merged: docs: README --append documentation (Greptile 5/5)
 - [x] PR #5 merged: chore: GitHub Actions CI workflow (Greptile 5/5)
+- [x] PR #6 merged: chore: review loop preparation files (Greptile 5/5*)
+
+*Round 2 returned stale cache; fix verified in branch before merge.
 
 ## TASK FORMAT
 

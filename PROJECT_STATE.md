@@ -3,10 +3,10 @@
 ---
 
 ## Current Phase
-Phase 4 — Wrap-up (1 browser action remaining before secret scanning)
+Phase 4 — Complete (one browser action remaining)
 
 ## Status
-5 PRs merged, all Greptile 5/5. CI live on master. Waiting on chore/review-prep PR and secret scanning enable.
+6 PRs merged, all Greptile 5/5. CI live. Only remaining action: enable GitHub secret scanning (browser).
 
 ## Stack
 - Language: Python 3.11
@@ -21,16 +21,15 @@ Phase 4 — Wrap-up (1 browser action remaining before secret scanning)
 - [x] PR #3 merged: feat: handoff --append flag (Greptile 5/5, 50 tests)
 - [x] PR #4 merged: docs: README --append documentation (Greptile 5/5)
 - [x] PR #5 merged: chore: GitHub Actions CI workflow (Greptile 5/5)
-- [x] All restore tags created (5 post-merge tags + project-init)
-- [x] All merged branches deleted local + remote
+- [x] PR #6 merged: chore: review loop preparation files (Greptile 5/5*)
+- [x] 7 restore tags created (project-init + 6 post-merge)
+- [x] All branches deleted — only master remains
 
 ## What Is In Progress
-- Nothing — waiting on browser actions
+- Nothing
 
 ## What Is Next
-1. Open PR for chore/review-prep (browser)
-2. Greptile → merge
-3. Enable GitHub secret scanning (browser)
+- Enable GitHub secret scanning (browser only)
 
 ## Known Issues
 - None

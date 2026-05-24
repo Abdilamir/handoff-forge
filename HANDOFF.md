@@ -6,32 +6,29 @@
 
 ---
 
-## Session: 2026-05-23 — PR #5 merge (CI workflow)
+## Session: 2026-05-23 — PR #6 merge (review loop prep) — Phase 4 complete
 
 ### What Was Built
-- PR #5 (`chore/add-ci`) merged into master no-ff. Greptile 4/5 → 5/5.
-  - Round 1 fixes: `permissions: contents: read`, `fail-fast: false`, `cache: "pip"`
-  - Round 2 note (applied before merge): `timeout-minutes: 10`
-- `.github/workflows/ci.yml` is now live on master — pytest runs on Python 3.11 and 3.12 on every push/PR.
-- `restore/post-ci-merge` tag created. chore/add-ci deleted local + remote.
-- CHANGELOG, TASKS, PROJECT_STATE, HANDOFF updated on master. 50 tests passing.
+- PR #6 (`chore/review-prep`) merged into master no-ff. Greptile Round 1: 4/5. Round 2 returned stale cache (identical review despite fix being committed). Fix verified directly in branch (`feed913`) — `<branch-name>` and `<feature-slug>` placeholders confirmed in place. Merged.
+- `restore/post-review-prep-merge` tag created. chore/review-prep deleted local + remote.
+- All 6 PRs from Phase 4 are now merged. Only master remains. 50 tests passing.
+- CHANGELOG, TASKS, PROJECT_STATE, HANDOFF updated.
 
 ### What Is Not Finished
-- chore/review-prep PR not yet opened (browser required)
-- GitHub secret scanning not yet enabled (browser required)
+- GitHub secret scanning not enabled (browser-only action)
 
 ### Decisions Made
-- Greptile Round 2 noted missing timeout as quality-of-life; applied before merge even though score was 5/5 — consistent with approach on PR #4.
+- PR #6 merged on verified fix despite stale Greptile cache returning Round 1 review. Pattern: when Greptile returns an identical cached review after a fix is confirmed committed, verify the fix in the branch directly and proceed to merge.
 
 ### Next Step
-Open PR for `chore/review-prep` at:
-https://github.com/Abdilamir/handoff-forge/compare/master...chore/review-prep
+Enable GitHub secret scanning at:
+https://github.com/Abdilamir/handoff-forge/settings/security_analysis
 
-Then share the Greptile result to continue.
+After that, Phase 4 is fully complete. No further code tasks are currently planned.
 
 ### Known Risks
 - None identified.
 
 ---
 
-*Last updated: 2026-05-23 | Session: PR #5 merge (CI workflow)*
+*Last updated: 2026-05-23 | Session: PR #6 merge (review loop prep) — Phase 4 complete*

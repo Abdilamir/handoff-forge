@@ -4,6 +4,16 @@
 
 ## 2026-05-23
 
+### [2026-05-23] — chore: review loop preparation files (PR #6) — MERGED
+- **Branch:** `chore/review-prep`
+- **Greptile:** Round 1: 4/5 → Round 2: stale cache (same review returned); fix verified in branch, merged
+- **What:** Added `plans/PROMPT_grep-loop.md` (reusable Greptile review-loop session prompt) and `reviews/PR_1_review_template.md` (PR #1 review checklist). Greptile finding: hardcoded PR-1-specific branch/tag names in merge checklist — replaced with `<branch-name>` and `<feature-slug>` placeholders.
+- **Files changed:** `plans/PROMPT_grep-loop.md`, `reviews/PR_1_review_template.md`
+- **Breaking changes:** None
+- **Tags:** `restore/post-review-prep-merge`
+
+---
+
 ### [2026-05-23] — chore: GitHub Actions CI workflow (PR #5) — MERGED
 - **Branch:** `chore/add-ci`
 - **Greptile:** Round 1: 4/5 → Round 2: 5/5 (Round 2 note: missing job timeout — added before merge)
