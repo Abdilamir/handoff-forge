@@ -1,5 +1,6 @@
 """Tests for file_ops service."""
 
+
 import pytest
 
 from handoff_forge.services.file_ops import (
@@ -80,8 +81,8 @@ def test_backup_file_raises_if_source_missing(tmp_path):
 
 def test_backup_file_collision_resolution(tmp_path):
     """When two backups share the same timestamp, the second appends a counter suffix."""
-    from unittest.mock import patch
     from datetime import datetime as _dt
+    from unittest.mock import patch
     fixed = _dt(2026, 1, 1, 0, 0, 0, 123456)
     original = tmp_path / "HANDOFF.md"
     original.write_text("v1", encoding="utf-8")
