@@ -155,7 +155,7 @@ Validating: /path/to/my-project
 ## File Safety
 
 - **Default behavior:** `init` skips files that already exist. `handoff` and `state` require `--overwrite` to replace existing files.
-- **Backups:** When `--overwrite` is used, the existing file is copied to `<filename>.bak.<YYYYMMDD-HHMMSS>` in the same directory before being replaced. `--append` never creates backups — it only extends the file.
+- **Backups:** When `--overwrite` is used, the existing file is copied to `<filename>.bak.<YYYYMMDD-HHMMSS-ffffff>` in the same directory before being replaced. `--append` and `checkpoint` never create backups — they only extend the file.
 - **No network access:** All commands are fully local. No API calls, no accounts, no telemetry.
 
 ---
@@ -175,17 +175,103 @@ python -m pytest tests/test_file_ops.py -v
 
 ---
 
+## Agent Operating Layer
+
+handoff-forge includes a set of commands for running projects with autonomous agents. The agent operating layer manages role specs, session continuity, and next-action synthesis so agents can resume work without human re-priming.
+
+### Workflow: start a new project with agents
+
+```bash
+# 1. Initialize project state files
+handoff-forge init ./my-project
+
+# 2. Initialize agent role specs
+handoff-forge agents init ./my-project
+# Creates: my-project/agents/{engineer,reviewer,architect,operator,researcher}.md
+
+# 3. Brief an agent at session start — paste the output directly to Claude
+handoff-forge agent brief engineer --target ./my-project
+
+# 4. During the session: drop a checkpoint (no backup created)
+handoff-forge checkpoint \
+  --task "Implementing auth endpoints" \
+  --next "Write integration tests for /auth/login" \
+  --branch "feat/auth" \
+  --target ./my-project
+
+# 5. At session end: write the full handoff
+handoff-forge handoff \
+  --session "Auth endpoints" \
+  --built "POST /auth/login and /auth/refresh implemented" \
+  --next "Write integration tests — see plans/PLAN_auth.md step 3" \
+  --target ./my-project --overwrite
+
+# 6. Start the next session: get the next action synthesized from all state files
+handoff-forge next --target ./my-project
+# Paste the output to Claude. Done.
+```
+
+### Agent commands
+
+#### `agents init [target] [--overwrite]`
+
+Creates an `agents/` directory with default role specs for: `engineer`, `reviewer`, `architect`, `operator`, `researcher`. Each spec defines the role, responsibilities, allowed actions, escalation rules, and output format.
+
+```bash
+handoff-forge agents init ./my-project
+handoff-forge agents init ./my-project --overwrite  # replaces existing specs with backups
+```
+
+#### `agent brief <role> [--target]`
+
+Prints a ready-to-use agent brief — the role spec from `agents/<role>.md` combined with the current `PROJECT_STATE.md` and `HANDOFF.md`. Paste the output directly to Claude to start a focused agent session.
+
+```bash
+handoff-forge agent brief engineer
+handoff-forge agent brief reviewer --target ./my-project
+```
+
+#### `next [--target]`
+
+Reads `HANDOFF.md`, `TASKS.md`, and `PROJECT_STATE.md` and outputs the synthesized next action. Replaces the manual "Read HANDOFF.md and tell me what's next" prompt.
+
+```bash
+handoff-forge next
+handoff-forge next --target ./my-project
+```
+
+#### `checkpoint --task "..." --next "..." [--branch] [--notes] [--target]`
+
+Appends a timestamped checkpoint entry to `HANDOFF.md`. Use mid-session to record progress without a full rewrite. No backup is created.
+
+```bash
+handoff-forge checkpoint \
+  --task "Implementing auth endpoints" \
+  --next "Write integration tests" \
+  --branch "feat/auth" \
+  --notes "JWT secret is in .env — do not commit"
+```
+
+---
+
 ## How It Fits the Agentic Engineering OS
 
-This tool is part of the [agentic-engineering-os](../agentic-engineering-os) workflow. The intended loop:
+The intended full session loop:
 
 ```
+START OF SESSION:
+  handoff-forge next --target ./my-project
+  # paste output to Claude → agent knows exactly what to do
+
+  # OR brief a specific agent role:
+  handoff-forge agent brief engineer --target ./my-project
+
 MID-SESSION CHECKPOINT:
+  handoff-forge checkpoint --task "..." --next "..." --branch "feat/x"
+
+  # OR append a handoff note:
   handoff-forge handoff --session "..." --built "..." --next "..." --append
 
 END OF SESSION (full rewrite):
-  handoff-forge handoff --session "..." --built "..." --next "..."
-
-START OF NEXT SESSION (Claude Code prompt):
-  "Read HANDOFF.md. Do not write any code. Tell me what was last completed and what the exact next step is."
+  handoff-forge handoff --session "..." --built "..." --next "..." --overwrite
 ```
