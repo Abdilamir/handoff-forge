@@ -4,56 +4,48 @@
 
 ---
 
-## Session: 2026-05-24 — Phase 5 Stabilisation & Phase 6 Developer Experience
+## Session: 2026-05-24 — Phase 6 Complete / Phase 7 Start
 
 ---
 
 ## What Was Built This Session
 
-**PRs merged (all Greptile 5/5):**
-- PR #7: `fix/backup-call-sites` — suppressed spurious backups in cmd_init and cmd_tasks (backup=False)
-- PR #8: `chore/add-gitignore` — .gitignore with .env/.pem/.key/open-source/ security patterns, no BOM
-- PR #9: `chore/project-hygiene` — SECURITY.md (public policy), --version sourced from __version__, no BOM
-- PR #10: `test/cli-coverage` — 18 tests for cmd_init/validate/state/handoff (rebased, 5/5)
-- PR #11: `chore/ci-expand` — CI matrix to Python 3.13, docs/test branch triggers
-- PR #12: `fix/readme-repo-url` — correct clone URL in README
-- PR #13: `chore/pyproject-metadata` — Code Generators classifier, no duplicate Homepage URL
-- PR #14: `fix/backup-microseconds` — microsecond timestamps + collision detection in backup_file
-- PR #15: `test/coverage-gaps` — 6 tests for validate output labels, init content, handoff backup content
-- PR #16: `chore/add-makefile` — Makefile (install/test/lint/clean), ruff added to dev deps
+**PR #17 merged (Greptile 5/5):**
+- `chore/ruff-config` — `[tool.ruff]` config in pyproject.toml (line-length=120, target-version=py311, select=E/F/W/I), CI ruff step gated to `matrix.python-version == '3.11'`, mechanical lint fixes across cli.py and test files.
+- Greptile rounds: 3/5 (dep conflict) → 4/5 (redundant matrix runs) → 5/5 (gated to py3.11)
+- Restore tag: `restore/after-pr17-merge`
 
-**What Is In Progress:**
-- PR #17: `chore/ruff-config` — [tool.ruff] config (line-length=120, E/F/W/I), CI ruff step, lint fixes — awaiting Greptile re-review
-
-**Test count:** 78 passing on master
+**Phase 6 (Developer Experience) is now complete.**
+All 17 PRs merged, all Greptile 5/5. 78 tests passing.
 
 ---
 
 ## What Was Not Finished
 
-- PR #17 merge pending Greptile re-review (should be 5/5 — ruff is now in dev deps from PR #16, [tool.ruff] config added, 2 E501 violations fixed)
+- Phase 7 tasks not yet started (queued, no blockers)
 
 ---
 
 ## Key Decisions
 
-- **backup_file() collision**: Added while-loop with counter suffix (-1, -2, ...) — Windows timer resolution means %f alone is not collision-safe
-- **line-length=120**: Set for CLI tools with verbose help strings; 100 caused too many violations in argparse help text
-- **ruff dep in PR #16**: ruff added to dev deps as part of Makefile PR; PR #17 adds only config and CI step — must merge in order
-- **E501 enforced**: With line-length=120, E501 is enforced (not silenced); 2 violations fixed in cli.py parser
+- **Ruff CI gated to py3.11**: Greptile 4/5 finding was that ruff ran identically on all 3 matrix entries (behavior is version-agnostic, controlled by target-version not runtime). Fixed with `if: matrix.python-version == '3.11'`. This is the correct pattern for linting in a multi-version matrix.
+- **Merge without final Greptile re-review wait**: After fixing the 4/5 concern (redundant runs), Greptile had already posted a 5/5 review on commit `582fe11` before this note was written. The review confirmed "Safe to merge — all changes are purely additive tooling config and cosmetic code fixes."
 
 ---
 
 ## Exact Next Step
 
-1. Wait for Greptile re-review on PR #17 (chore/ruff-config) — expected 5/5
-2. Merge PR #17: `git merge --no-ff chore/ruff-config`, push master, tag restore/after-pr17-merge, delete branch
-3. Update CHANGELOG with PR #17 entry and update PROJECT_STATE.md to Phase 6 complete
-4. Assess Phase 7 roadmap: PyPI packaging prep, --version bump workflow, pip-audit integration
+1. Start Phase 7 — branch `chore/version-bump-workflow`:
+   - Add CHANGELOG release entry format (semver header: `## [0.1.1] — YYYY-MM-DD`)
+   - Bump `pyproject.toml` version from `0.1.0` to `0.1.1`
+   - Files: `pyproject.toml`, `CHANGELOG.md`
+2. Then `chore/pip-audit`:
+   - Add `pip-audit` step to CI (pre-release job or new workflow step)
+   - Document audit policy in `SECURITY.md`
+3. Enable GitHub secret scanning (browser action)
 
 ---
 
 ## Risks
 
-- PR #17 has 4 commits including a stale "remove ruff from dev deps" commit (conflict-avoidance before PR #16 merged) and a "restore" commit. Greptile may question history but the net diff is correct.
-- CI on PR #17: the force-pushed branch now includes master's ruff in dev deps, so ruff lint step should install correctly.
+- None. Master is clean. 78 tests green. ruff clean. CI fully green.

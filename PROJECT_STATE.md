@@ -3,17 +3,17 @@
 ---
 
 ## Current Phase
-Phase 6 — Developer Experience (1 PR pending merge)
+Phase 7 — PyPI & Release Prep
 
 ## Status
-16 PRs merged, all Greptile 5/5. PR #17 awaiting Greptile re-review. 78 tests passing. CI runs on Python 3.11/3.12/3.13.
+17 PRs merged, all Greptile 5/5. 78 tests passing. CI runs on Python 3.11/3.12/3.13 with ruff enforced on 3.11.
 
 ## Stack
 - Language: Python 3.11+
 - Runtime dependencies: none (stdlib only)
 - Dev dependencies: pytest>=7.4, ruff>=0.4
 - Entry point: `handoff-forge` CLI via pyproject.toml scripts
-- CI: GitHub Actions — matrix 3.11/3.12/3.13 + ruff lint step (pending PR #17 merge)
+- CI: GitHub Actions — matrix 3.11/3.12/3.13 + ruff lint step (gated to 3.11)
 - Make targets: install, test, lint, clean
 
 ## What Is Done
@@ -33,18 +33,20 @@ Phase 6 — Developer Experience (1 PR pending merge)
 - [x] PR #14: fix: microsecond timestamps and collision detection in backup_file (Greptile 5/5, 72 tests)
 - [x] PR #15: test: validate output, init content, handoff backup coverage (Greptile 5/5, 78 tests)
 - [x] PR #16: chore: Makefile (install/test/lint/clean) + ruff in dev deps (Greptile 5/5)
-- [x] 11 restore tags created
+- [x] PR #17: chore: [tool.ruff] config + CI ruff enforcement (gated to py3.11) (Greptile 5/5)
+- [x] 12 restore tags created
 - [x] .gitignore with security patterns
 - [x] SECURITY.md — public disclosure policy
-- [x] ruff>=0.4 in dev deps, [tool.ruff] configured with line-length=120
+- [x] ruff>=0.4 in dev deps, [tool.ruff] configured with line-length=120, enforced on CI
 
 ## What Is In Progress
-- PR #17 (chore/ruff-config): [tool.ruff] config + CI ruff step + lint fixes — awaiting Greptile re-review
+- None
 
 ## What Is Next
-- Merge PR #17 after Greptile 5/5
-- Phase 7 (PyPI & Release): version bump workflow, pip-audit, twine upload prep
-- Enable GitHub secret scanning (browser action required)
+- Phase 7 (PyPI & Release):
+  - chore/version-bump-workflow — CHANGELOG entry format for releases, bump to v0.1.1
+  - chore/pip-audit — pip-audit in CI pre-release check, documented in SECURITY.md
+  - Enable GitHub secret scanning (browser action required)
 
 ## Known Issues
 - None

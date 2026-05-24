@@ -11,10 +11,6 @@
       URL: https://github.com/Abdilamir/handoff-forge/settings/security_analysis
       Risk: none
 
-## In Progress
-
-- [ ] PR #17 (chore/ruff-config): [tool.ruff] config + CI enforcement + lint fixes — awaiting Greptile re-review
-
 ## Queue — Phase 7 (PyPI & Release Prep)
 
 - [ ] chore/version-bump-workflow — add CHANGELOG entry format for releases, bump pyproject.toml version to 0.1.1
@@ -43,6 +39,7 @@
 - [x] PR #14 merged: fix: microsecond timestamps and collision detection (Greptile 5/5)
 - [x] PR #15 merged: test: coverage gaps (validate output, init content, handoff backup) (Greptile 5/5)
 - [x] PR #16 merged: chore: Makefile + ruff in dev deps (Greptile 5/5)
+- [x] PR #17 merged: chore: ruff config + CI enforcement (Greptile 5/5)
 
 ## TASK FORMAT
 

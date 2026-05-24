@@ -2,6 +2,17 @@
 
 ---
 
+### [2026-05-24] — chore: add ruff linting to dev deps and CI (PR #17) — MERGED
+- **Branch:** `chore/ruff-config`
+- **Greptile:** Round 1: 3/5 (ruff dep conflict) → Round 2: 4/5 (redundant matrix runs) → Round 3: 5/5
+- **What:** Added `[tool.ruff]` config to `pyproject.toml` (line-length=120, target-version=py311, select=E/F/W/I). Added ruff lint step to CI gated on `matrix.python-version == '3.11'` to avoid redundant identical runs across the matrix. Applied mechanical lint fixes: two long `add_argument` calls reformatted, unused import removed, import order corrected, blank-line violations cleaned up across cli.py and test files.
+- **Files changed:** `.github/workflows/ci.yml`, `pyproject.toml`, `src/handoff_forge/cli.py`, `tests/test_cli_commands.py`, `tests/test_file_ops.py`
+- **Tests:** 78 (unchanged — purely tooling/style changes)
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr17-merge`
+
+---
+
 ### [2026-05-24] — test: coverage gaps — validate output, init content, handoff backup (PR #15) — MERGED
 - **Branch:** `test/coverage-gaps`
 - **Greptile:** Round 1: 4/5 (missing length guard on backups[0]) → Round 2: 5/5
