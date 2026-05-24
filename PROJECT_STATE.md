@@ -3,17 +3,18 @@
 ---
 
 ## Current Phase
-Phase 5 — Stabilisation & Hardening (in progress)
+Phase 6 — Developer Experience (1 PR pending merge)
 
 ## Status
-11 PRs merged, all Greptile 5/5. 2 PRs awaiting Greptile re-review (#10, #13). 53 tests passing. CI runs on Python 3.11/3.12/3.13.
+16 PRs merged, all Greptile 5/5. PR #17 awaiting Greptile re-review. 78 tests passing. CI runs on Python 3.11/3.12/3.13.
 
 ## Stack
 - Language: Python 3.11+
 - Runtime dependencies: none (stdlib only)
-- Dev dependencies: pytest
+- Dev dependencies: pytest>=7.4, ruff>=0.4
 - Entry point: `handoff-forge` CLI via pyproject.toml scripts
-- CI: GitHub Actions — `.github/workflows/ci.yml` active, matrix: 3.11/3.12/3.13
+- CI: GitHub Actions — matrix 3.11/3.12/3.13 + ruff lint step (pending PR #17 merge)
+- Make targets: install, test, lint, clean
 
 ## What Is Done
 - [x] PR #1: feat: add validate command (Greptile 5/5, 33 tests)
@@ -25,23 +26,25 @@ Phase 5 — Stabilisation & Hardening (in progress)
 - [x] PR #7: fix: suppress spurious backups in cmd_init/cmd_tasks (Greptile 5/5, 53 tests)
 - [x] PR #8: chore: add .gitignore with security patterns (Greptile 5/5)
 - [x] PR #9: chore: add SECURITY.md and source --version from __version__ (Greptile 5/5)
+- [x] PR #10: test: 18 CLI integration tests (Greptile 5/5, 71 tests)
 - [x] PR #11: chore: expand CI to Python 3.13 (Greptile 5/5)
 - [x] PR #12: fix: correct README clone URL (Greptile 5/5)
-- [x] 9 restore tags created
-- [x] .gitignore with security patterns (.env, *.pem, *.key, open-source/)
+- [x] PR #13: chore: pyproject.toml metadata hardening (Greptile 5/5)
+- [x] PR #14: fix: microsecond timestamps and collision detection in backup_file (Greptile 5/5, 72 tests)
+- [x] PR #15: test: validate output, init content, handoff backup coverage (Greptile 5/5, 78 tests)
+- [x] PR #16: chore: Makefile (install/test/lint/clean) + ruff in dev deps (Greptile 5/5)
+- [x] 11 restore tags created
+- [x] .gitignore with security patterns
 - [x] SECURITY.md — public disclosure policy
+- [x] ruff>=0.4 in dev deps, [tool.ruff] configured with line-length=120
 
 ## What Is In Progress
-- PR #10 (test/cli-coverage): 18 new tests for cmd_init/validate/state/handoff — rebased onto master, awaiting Greptile re-review
-- PR #13 (chore/pyproject-metadata): pyproject.toml hardened — classifier and duplicate URL fixed, awaiting Greptile re-review
+- PR #17 (chore/ruff-config): [tool.ruff] config + CI ruff step + lint fixes — awaiting Greptile re-review
 
 ## What Is Next
-- Merge #10 and #13 after Greptile 5/5
-- fix/backup-microseconds: eliminate 1-second timestamp collision window in backup_file()
-- test/coverage-gaps: backup collision test, additional edge-case coverage
-- chore/add-makefile: developer ergonomics (make test/install/lint)
-- chore/ruff-config: static analysis on CI
-- Enable GitHub secret scanning (browser)
+- Merge PR #17 after Greptile 5/5
+- Phase 7 (PyPI & Release): version bump workflow, pip-audit, twine upload prep
+- Enable GitHub secret scanning (browser action required)
 
 ## Known Issues
 - None
