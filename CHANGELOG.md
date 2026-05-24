@@ -2,6 +2,17 @@
 
 ---
 
+### [2026-05-24] — fix: microsecond timestamps and collision detection in backup_file (PR #14) — MERGED
+- **Branch:** `fix/backup-microseconds`
+- **Greptile:** Round 1: 4/5 (CLAUDE.md format string stale) → Round 2: 5/5
+- **What:** Extended backup timestamp from `%Y%m%d-%H%M%S` to `%Y%m%d-%H%M%S-%f`. Added collision detection: if backup path already exists, appends `-1`, `-2`, ... until a free name is found (fixes Windows timer resolution issue where two rapid calls can produce identical microsecond timestamps). Replaced flaky timing-based test with deterministic mock-patched collision test. Updated CLAUDE.md format string.
+- **Files changed:** `src/handoff_forge/services/file_ops.py`, `tests/test_file_ops.py`, `CLAUDE.md`
+- **Tests:** 1 new (collision resolution) — 72 total passing
+- **Breaking changes:** None (backup filename format extends, `.gitignore` `*.bak.*.md` pattern still matches)
+- **Tags:** `restore/after-pr14-merge`
+
+---
+
 ## 2026-05-24
 
 ### [2026-05-24] — chore: expand CI matrix and fix branch trigger patterns (PR #11) — MERGED
