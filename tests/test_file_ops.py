@@ -79,16 +79,23 @@ def test_backup_file_raises_if_source_missing(tmp_path):
         backup_file(tmp_path / "ghost.md")
 
 
-def test_backup_file_two_rapid_calls_produce_distinct_files(tmp_path):
+def test_backup_file_collision_resolution(tmp_path):
+    """When two backups share the same timestamp, the second appends a counter suffix."""
+    from unittest.mock import patch
+    from datetime import datetime as _dt
+    fixed = _dt(2026, 1, 1, 0, 0, 0, 123456)
     original = tmp_path / "HANDOFF.md"
     original.write_text("v1", encoding="utf-8")
-    b1 = backup_file(original)
-    original.write_text("v2", encoding="utf-8")
-    b2 = backup_file(original)
-    assert b1 != b2, "rapid backups must produce unique filenames (microsecond timestamp)"
+    with patch("handoff_forge.services.file_ops.datetime") as mock_dt:
+        mock_dt.now.return_value = fixed
+        b1 = backup_file(original)
+        original.write_text("v2", encoding="utf-8")
+        b2 = backup_file(original)
+    assert b1 != b2
     assert b1.exists() and b2.exists()
     assert b1.read_text(encoding="utf-8") == "v1"
     assert b2.read_text(encoding="utf-8") == "v2"
+    assert b2.name.endswith("-1.md")
 
 
 def test_ensure_directory_creates_nested(tmp_path):
