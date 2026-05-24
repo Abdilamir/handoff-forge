@@ -86,7 +86,7 @@ def cmd_init(args: argparse.Namespace) -> int:
         if file_ops.file_exists(path):
             if args.overwrite:
                 backup = file_ops.backup_file(path)
-                file_ops.write_file(path, content, overwrite=True)
+                file_ops.write_file(path, content, overwrite=True, backup=False)
                 backed_up.append(f"  {filename} (backup: {backup.name})")
             else:
                 skipped.append(f"  {filename} — already exists, use --overwrite to replace")
@@ -179,7 +179,7 @@ def cmd_tasks(args: argparse.Namespace) -> int:
     if file_ops.file_exists(path):
         existing = file_ops.read_file(path) or ""
         updated = file_ops.insert_task_entry(existing, entry)
-        file_ops.write_file(path, updated, overwrite=True)
+        file_ops.write_file(path, updated, overwrite=True, backup=False)
     else:
         # No existing file — create a minimal one with this task
         content = templates.tasks_template(
