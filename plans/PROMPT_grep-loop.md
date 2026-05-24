@@ -51,10 +51,10 @@ Then re-request Greptile review.
 Before merging:
 1. All tests passing on feature branch
 2. Greptile score 5/5
-3. Human diff review complete (git diff master...feature/validate-command)
+3. Human diff review complete (git diff master...<branch-name>)
 4. CHANGELOG.md updated with final merge entry
 5. No uncommitted changes
 
-Merge: git checkout master && git merge --no-ff feature/validate-command
-Tag: git tag restore/post-validate-merge
+Merge: git checkout master && git merge --no-ff <branch-name>
+Tag: git tag restore/post-<feature-slug>-merge
 ```
