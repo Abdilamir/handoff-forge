@@ -13,6 +13,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from handoff_forge import __version__
 from handoff_forge.services import file_ops, templates
 
 
@@ -198,7 +199,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="handoff-forge",
         description="Generate and update AI engineering session handoff files",
     )
-    parser.add_argument("--version", action="version", version="handoff-forge 0.1.0")
+    parser.add_argument("--version", action="version", version=f"handoff-forge {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
     # init
