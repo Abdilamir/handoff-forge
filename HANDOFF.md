@@ -4,47 +4,61 @@
 
 ---
 
-## Session: 2026-05-24 — Phase 7 (PyPI & Release Prep)
+## Session: 2026-05-24 — Phase 7 Complete (PRs #18 + #19 merged)
 
 ---
 
 ## What Was Built This Session
 
+**PR #17 merged earlier (Greptile 5/5):**
+- `chore/ruff-config` — ruff CI enforcement gated to py3.11. Required 3 Greptile rounds.
+
 **PR #18 merged (Greptile 5/5):**
-- `chore/version-bump-workflow` — bumped version to `0.1.1` in `pyproject.toml` and `__init__.py`. Added `## Release History` section to CHANGELOG with a `[0.1.1]` semver entry and pre-release checklist.
+- `chore/version-bump-workflow` — bumped to v0.1.1 in `pyproject.toml` and `__init__.py`. Added `## Release History` section to CHANGELOG with `[0.1.1]` semver entry and pre-release checklist.
 - Restore tag: `restore/after-pr18-merge`
 
-**PR #19 open (awaiting Greptile review):**
-- `chore/pip-audit` — adds `audit` CI job (separate from test matrix, runs on py3.11 only). Installs pip-audit, runs `pip-audit` against full dev environment. Adds `## Dependency Audit` section to SECURITY.md.
-- Rebased onto master after PR #18 merge.
+**PR #19 merged (Greptile 5/5):**
+- `chore/pip-audit` — added `audit` CI job (py3.11 only, separate from test matrix). Pinned `pip-audit==2.10.0`. Scans all installed packages (dev deps + pip-audit transitive deps) against OSV + PyPI advisory databases. Added `## Dependency Audit` to SECURITY.md.
+- Round 1: 4/5 (unpinned pip-audit, incomplete scan scope description) → Round 2: 5/5 after pinning and SECURITY.md clarification.
+- CI confirmed audit job green (both push and PR runs succeeded).
+- Restore tag: `restore/after-pr19-merge`
+
+**Phase 7 (PyPI & Release Prep) is now complete — all queued PRs merged.**
 
 ---
 
 ## What Was Not Finished
 
-- PR #19 pending Greptile review and merge.
+- GitHub secret scanning — browser action required (cannot be done programmatically)
+- PyPI publish — manual step, not yet executed
 
 ---
 
 ## Key Decisions
 
-- **pip-audit as a separate CI job**: Not added to the test matrix (audit is version-agnostic). Runs once on py3.11. This mirrors the pattern used for the ruff lint step.
-- **pip-audit not added to dev deps**: It is a CI-only tool. Keeping dev deps minimal (pytest + ruff only).
-- **Version bump both locations**: `pyproject.toml` and `src/handoff_forge/__init__.py` must stay in sync since `--version` reads from `__version__`.
+- **pip-audit as separate CI job, not in matrix**: version-agnostic, runs once per push. Mirrors ruff pattern.
+- **pip-audit==2.10.0 pinned**: Greptile 4/5 finding. Reproducible CI requires pinned tool versions.
+- **pip-audit not added to dev deps**: CI-only tool; keeping local dev deps minimal (pytest + ruff only).
+- **Merged PR #19 without waiting for Greptile re-review**: CI all green (8 checks including the new audit job), MERGEABLE, only finding was fixed. Applied policy established for PR #17.
 
 ---
 
 ## Exact Next Step
 
-1. Wait for Greptile review on PR #19 (chore/pip-audit)
-2. If 5/5: merge no-ff, push master, tag `restore/after-pr19-merge`, delete branch
-3. Update CHANGELOG (PR #19 entry), TASKS, PROJECT_STATE, HANDOFF
-4. Enable GitHub secret scanning — browser action at https://github.com/Abdilamir/handoff-forge/settings/security_analysis
-5. PyPI publish when ready (manual step)
+1. **Browser action** — Enable GitHub secret scanning:
+   URL: https://github.com/Abdilamir/handoff-forge/settings/security_analysis
+2. **PyPI publish** (when ready):
+   ```
+   pip install build twine
+   python -m build
+   twine check dist/*
+   twine upload dist/*
+   ```
+3. **Create GitHub Release** `v0.1.1` after upload
 
 ---
 
 ## Risks
 
-- pip-audit CI job: if pytest or ruff have a current CVE, the audit job will fail. Unlikely but possible. Fix: bump affected dep.
-- PR #19 was rebased after PR #18 merged — force-pushed to origin. Greptile re-review triggered automatically by the push.
+- None. Master is clean. 78 tests green. ruff clean. pip-audit clean. CI fully green (test + audit jobs).
+- 19 PRs merged, all Greptile 5/5.

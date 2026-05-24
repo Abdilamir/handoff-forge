@@ -3,17 +3,17 @@
 ---
 
 ## Current Phase
-Phase 7 — PyPI & Release Prep
+Phase 7 — PyPI & Release Prep (all planned PRs merged)
 
 ## Status
-18 PRs merged, all Greptile 5/5. 78 tests passing. CI runs on Python 3.11/3.12/3.13 with ruff enforced on 3.11. Version 0.1.1. PR #19 (pip-audit) open.
+19 PRs merged, all Greptile 5/5. 78 tests passing. Version 0.1.1. CI: matrix 3.11/3.12/3.13 + ruff (gated to 3.11) + pip-audit audit job. No open PRs.
 
 ## Stack
 - Language: Python 3.11+
 - Runtime dependencies: none (stdlib only)
 - Dev dependencies: pytest>=7.4, ruff>=0.4
 - Entry point: `handoff-forge` CLI via pyproject.toml scripts
-- CI: GitHub Actions — matrix 3.11/3.12/3.13 + ruff lint step (gated to 3.11)
+- CI: GitHub Actions — matrix 3.11/3.12/3.13 + ruff lint (gated to 3.11) + pip-audit audit job (py3.11)
 - Make targets: install, test, lint, clean
 
 ## What Is Done
@@ -35,18 +35,20 @@ Phase 7 — PyPI & Release Prep
 - [x] PR #16: chore: Makefile (install/test/lint/clean) + ruff in dev deps (Greptile 5/5)
 - [x] PR #17: chore: [tool.ruff] config + CI ruff enforcement (gated to py3.11) (Greptile 5/5)
 - [x] PR #18: chore: version bump to 0.1.1 + release history section in CHANGELOG (Greptile 5/5)
-- [x] 12 restore tags created
+- [x] PR #19: chore: pip-audit==2.10.0 CI audit job + SECURITY.md dependency audit section (Greptile 5/5)
+- [x] 14 restore tags created
 - [x] .gitignore with security patterns
-- [x] SECURITY.md — public disclosure policy
+- [x] SECURITY.md — public disclosure policy + dependency audit section
 - [x] ruff>=0.4 in dev deps, [tool.ruff] configured with line-length=120, enforced on CI
+- [x] pip-audit==2.10.0 in CI audit job, scanning OSV + PyPI advisory databases
 
 ## What Is In Progress
-- PR #19 (chore/pip-audit): pip-audit CI job + SECURITY.md documentation — awaiting Greptile review
+- None
 
 ## What Is Next
-- Merge PR #19 after Greptile 5/5
-- Enable GitHub secret scanning (browser action required)
+- Enable GitHub secret scanning (browser action required — see TASKS.md)
 - PyPI publish: `python -m build && twine check dist/* && twine upload dist/*`
+- Create GitHub Release `v0.1.1` after upload
 
 ## Known Issues
 - None

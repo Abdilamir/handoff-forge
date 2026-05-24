@@ -11,12 +11,6 @@
       URL: https://github.com/Abdilamir/handoff-forge/settings/security_analysis
       Risk: none
 
-## Queue — Phase 7 (PyPI & Release Prep)
-
-- [ ] chore/pip-audit — add pip-audit to CI pre-release check, document in SECURITY.md — PR #19 open, awaiting Greptile
-      Files: .github/workflows/ci.yml, SECURITY.md
-      Risk: low
-
 ## Completed This Phase
 
 - [x] PR #1 merged: feat: validate command (Greptile 5/5)
@@ -37,6 +31,7 @@
 - [x] PR #16 merged: chore: Makefile + ruff in dev deps (Greptile 5/5)
 - [x] PR #17 merged: chore: ruff config + CI enforcement (Greptile 5/5)
 - [x] PR #18 merged: chore: version bump to 0.1.1 + release history in CHANGELOG (Greptile 5/5)
+- [x] PR #19 merged: chore: pip-audit CI job + SECURITY.md dependency audit section (Greptile 5/5)
 
 ## TASK FORMAT
 

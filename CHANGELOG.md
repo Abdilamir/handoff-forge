@@ -29,6 +29,17 @@ Initial working release: 5 commands, stdlib only, 28 tests.
 
 ---
 
+### [2026-05-24] — chore: add pip-audit CI job and document audit policy in SECURITY.md (PR #19) — MERGED
+- **Branch:** `chore/pip-audit`
+- **Greptile:** Round 1: 4/5 (pip-audit unpinned; SECURITY.md scan scope incomplete) → Round 2: 5/5
+- **What:** Added `audit` CI job (separate from test matrix, runs on py3.11 only). Installs `pip-audit==2.10.0` (pinned) and scans the full dev environment against OSV and PyPI advisory databases. Added `## Dependency Audit` section to SECURITY.md describing scan scope (all installed packages including pip-audit's own transitive deps) and remediation path.
+- **Files changed:** `.github/workflows/ci.yml`, `SECURITY.md`
+- **Tests:** 78 (unchanged)
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr19-merge`
+
+---
+
 ### [2026-05-24] — chore: bump version to 0.1.1 and add release history to CHANGELOG (PR #18) — MERGED
 - **Branch:** `chore/version-bump-workflow`
 - **Greptile:** 5/5
