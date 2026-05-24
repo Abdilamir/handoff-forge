@@ -27,7 +27,7 @@ a reasonable disclosure window.
 
 All dependencies (runtime and dev) are scanned for known vulnerabilities on every CI run using [pip-audit](https://github.com/pypa/pip-audit). The `audit` job in `.github/workflows/ci.yml` installs the full dev environment and runs `pip-audit` against it.
 
-handoff-forge has zero runtime dependencies. Any finding would come from a dev dependency (pytest, ruff) with a known CVE — in that case the fix is to bump the affected dep in `pyproject.toml`.
+handoff-forge has zero runtime dependencies. `pip-audit` scans all packages installed in the environment — dev dependencies (pytest, ruff) and pip-audit's own transitive dependencies — against the OSV and PyPI advisory databases. Any finding should be remediated by bumping the affected package in `pyproject.toml` or by updating the pip-audit pin in `ci.yml`.
 
 ## Security Properties of This Tool
 
