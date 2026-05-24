@@ -43,7 +43,7 @@ handoff-forge init ./my-project --overwrite
 
 ### `handoff` — Generate or update HANDOFF.md
 
-Writes a complete, structured HANDOFF.md from your session notes. Use this at the end of every coding session.
+Writes a complete, structured HANDOFF.md from your session notes. Use at the end of a session for a full rewrite, or with `--append` for a compact mid-session checkpoint.
 
 ```bash
 handoff-forge handoff \
