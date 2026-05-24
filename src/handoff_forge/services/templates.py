@@ -326,7 +326,6 @@ def next_action_output(
     status = _extract_section(state_content, "## Status") or "Unknown"
     next_step = (
         _extract_section(handoff_content, "### Next Step")
-        or _extract_section(handoff_content, "## Exact Next Step")
         or "Not specified in HANDOFF.md"
     )
     next_task = _first_open_task(tasks_content) or "No open tasks found in TASKS.md"
@@ -376,7 +375,7 @@ def _extract_section(content: str | None, header: str) -> str | None:
             in_section = True
             continue
         if in_section:
-            if line.startswith("##") or line.startswith("---"):
+            if line.startswith("## ") or line.startswith("---"):
                 break
             collected.append(line)
     text = "\n".join(collected).strip()
