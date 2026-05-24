@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 *.pyo
@@ -21,6 +21,12 @@ htmlcov/
 venv/
 env/
 
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+
 # Backup files created by handoff-forge itself
 *.bak.*.md
 
@@ -29,3 +35,6 @@ env/
 Thumbs.db
 *.swp
 *.swo
+
+# Local open-source dependency snapshots
+open-source/
