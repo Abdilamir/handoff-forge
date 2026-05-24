@@ -217,7 +217,10 @@ def build_parser() -> argparse.ArgumentParser:
     p_handoff.add_argument("--risks", help="Known risks (optional)")
     p_handoff.add_argument("--target", default=".", help="Directory containing HANDOFF.md (default: .)")
     p_handoff.add_argument("--overwrite", action="store_true", help="Overwrite existing HANDOFF.md (creates backup)")
-    p_handoff.add_argument("--append", action="store_true", help="Append a compact note to existing HANDOFF.md instead of full rewrite")
+    p_handoff.add_argument(
+        "--append", action="store_true",
+        help="Append a compact note to existing HANDOFF.md instead of full rewrite",
+    )
     p_handoff.set_defaults(func=cmd_handoff)
 
     # state
@@ -241,7 +244,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     # validate
     p_validate = sub.add_parser("validate", help="Check whether a project contains all required OS files")
-    p_validate.add_argument("target", nargs="?", default=".", help="Project directory to validate (default: current directory)")
+    p_validate.add_argument(
+        "target", nargs="?", default=".", help="Project directory to validate (default: current directory)",
+    )
     p_validate.set_defaults(func=cmd_validate)
 
     return parser
