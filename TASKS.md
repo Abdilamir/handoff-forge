@@ -32,6 +32,7 @@
 - [x] PR #17 merged: chore: ruff config + CI enforcement (Greptile 5/5)
 - [x] PR #18 merged: chore: version bump to 0.1.1 + release history in CHANGELOG (Greptile 5/5)
 - [x] PR #19 merged: chore: pip-audit CI job + SECURITY.md dependency audit section (Greptile 5/5)
+- [x] PR #20 merged: feat: agent operating layer — agents init, agent brief, next, checkpoint (99 tests)
 
 ## TASK FORMAT
 

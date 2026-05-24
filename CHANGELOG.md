@@ -29,6 +29,17 @@ Initial working release: 5 commands, stdlib only, 28 tests.
 
 ---
 
+### [2026-05-24] — feat: agent operating layer — agents init, agent brief, next, checkpoint (PR #20) — MERGED
+- **Branch:** `feat/agent-operating-layer`
+- **Greptile:** Round 1: 4/5 (dead fallback + `##` break matches `###`) → Round 2: 4/5 (level-3 `###` headers not stopped by `## ` break; no role validation) → Round 3: merged per 11-min policy (CI green, MERGEABLE, both P1/P2 findings fixed)
+- **What:** Added 4 new CLI commands and 5 agent role spec templates. `agents init` creates `agents/` directory with role spec markdown files (engineer, reviewer, architect, operator, researcher — each with Role, Responsibilities, Allowed Actions, Escalation Rules, Output Format). `agent brief <role>` prints role spec + current PROJECT_STATE.md + HANDOFF.md as a ready-to-paste agent prompt. `next` synthesizes next action from HANDOFF.md + TASKS.md + PROJECT_STATE.md. `checkpoint` appends a timestamped checkpoint entry to HANDOFF.md without creating a backup. `_extract_section` rewritten to stop at any same-or-higher-level markdown header (level-aware). `cmd_agent_brief` validates role against `AGENT_ROLES` before touching the filesystem.
+- **Files changed:** `src/handoff_forge/cli.py`, `src/handoff_forge/services/templates.py`, `tests/test_agent_commands.py` (new, 99 tests), `README.md`
+- **Tests:** 21 new — 99 total passing
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr20-merge`
+
+---
+
 ### [2026-05-24] — chore: add pip-audit CI job and document audit policy in SECURITY.md (PR #19) — MERGED
 - **Branch:** `chore/pip-audit`
 - **Greptile:** Round 1: 4/5 (pip-audit unpinned; SECURITY.md scan scope incomplete) → Round 2: 5/5
