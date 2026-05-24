@@ -1,42 +1,32 @@
 # SECURITY.md
 
----
+## Supported Versions
 
-## Security Profile
+handoff-forge is a local CLI tool with no network access, no accounts, and no
+server-side components. There is no production deployment to patch.
 
-**Risk level: Very low.** This tool reads and writes local markdown files only. No network access, no credentials, no external services.
+| Version | Supported |
+|---------|-----------|
+| 0.1.x   | Yes       |
 
----
+## Reporting a Vulnerability
 
-## Rules in Force
+If you discover a security issue (e.g. path traversal in file writes, unsafe
+template rendering, dependency vulnerability):
 
-- No runtime dependencies — zero supply chain attack surface
-- Dev dependency (pytest) is well-established (>10 years, millions of weekly downloads)
-- Tool never reads `.env` files and has no mechanism to do so
-- No API keys, tokens, or secrets of any kind
-- No network calls in any command
+1. Do **not** open a public GitHub issue.
+2. Email the maintainer directly or open a GitHub Security Advisory:
+   https://github.com/Abdilamir/handoff-forge/security/advisories/new
+3. Include: affected version, reproduction steps, and proposed fix if known.
 
----
+You will receive a response within 72 hours. If the issue is confirmed, a
+patched release will be published and the advisory will be made public after
+a reasonable disclosure window.
 
-## File Safety Guarantees
+## Security Properties of This Tool
 
-- Default behavior never overwrites existing files
-- All overwrites create automatic timestamped backups
-- Backups are in the same directory as the original file — no data is sent anywhere
-
----
-
-## Pre-Release Checklist
-
-- [ ] `pip-audit` clean (run before any public release)
-- [ ] No hardcoded values in source (`git grep -i "password\|secret\|api_key\|token"`)
-- [ ] README does not instruct users to pipe scripts from the internet
-- [ ] GitHub secret scanning enabled on repo
-
----
-
-## Audits Run
-
-| Date | What | Result |
-|------|------|--------|
-| 2026-05-22 | Initial implementation review | Clean — no deps, no network, no secrets |
+- **No network access:** all commands are fully local
+- **No credentials or secrets handled:** no API keys, tokens, or auth flows
+- **Non-destructive writes:** existing files are backed up before overwrite
+- **No subprocess calls or shell execution:** pure Python stdlib only
+- **No eval or exec:** templates are plain f-strings
