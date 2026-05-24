@@ -156,3 +156,18 @@ def test_cmd_init_overwrite_creates_exactly_one_backup_per_file(tmp_path):
     backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
     assert len(backups) == 1
     assert backups[0].read_text(encoding="utf-8") == "old handoff"
+
+
+def test_cmd_init_overwrite_all_three_files_creates_three_backups(tmp_path):
+    """Each pre-existing file gets exactly one backup — not two from the manual+write_file pair."""
+    (tmp_path / "HANDOFF.md").write_text("old handoff", encoding="utf-8")
+    (tmp_path / "PROJECT_STATE.md").write_text("old state", encoding="utf-8")
+    (tmp_path / "TASKS.md").write_text("old tasks", encoding="utf-8")
+    args = _make_init_args(str(tmp_path), overwrite=True)
+    cmd_init(args)
+    backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+    assert len(backups) == 3
+    backup_contents = {b.read_text(encoding="utf-8") for b in backups}
+    assert "old handoff" in backup_contents
+    assert "old state" in backup_contents
+    assert "old tasks" in backup_contents
