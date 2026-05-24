@@ -2,6 +2,27 @@
 
 ---
 
+### [2026-05-24] — test: coverage gaps — validate output, init content, handoff backup (PR #15) — MERGED
+- **Branch:** `test/coverage-gaps`
+- **Greptile:** Round 1: 4/5 (missing length guard on backups[0]) → Round 2: 5/5
+- **What:** Added 6 tests: cmd_validate [OK]/[MISSING] output labels; cmd_init section header content in each generated file; cmd_handoff --overwrite backup content verification with explicit length guard.
+- **Files changed:** `tests/test_cli_commands.py`, `tests/test_cli.py`, `tests/test_file_ops.py`
+- **Tests:** 6 new — 78 total passing
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr15-pr16-merge`
+
+---
+
+### [2026-05-24] — chore: Makefile with install, test, lint, clean targets (PR #16) — MERGED
+- **Branch:** `chore/add-makefile`
+- **Greptile:** Round 1: 3/5 (ruff missing from dev deps) → Round 2: 5/5
+- **What:** Added `Makefile` with `make install/test/lint/clean`. Added `ruff>=0.4` to dev extras so `make lint` works after `make install`.
+- **Files changed:** `Makefile` (new), `pyproject.toml`
+- **Breaking changes:** None
+- **Tags:** `restore/after-pr15-pr16-merge`
+
+---
+
 ### [2026-05-24] — fix: microsecond timestamps and collision detection in backup_file (PR #14) — MERGED
 - **Branch:** `fix/backup-microseconds`
 - **Greptile:** Round 1: 4/5 (CLAUDE.md format string stale) → Round 2: 5/5
