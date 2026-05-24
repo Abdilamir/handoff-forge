@@ -1,8 +1,6 @@
 """Tests for cli command functions."""
 
 import argparse
-import pytest
-from pathlib import Path
 
 from handoff_forge.cli import cmd_handoff, cmd_init, cmd_tasks
 

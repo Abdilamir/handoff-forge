@@ -1,7 +1,6 @@
 """Tests for cmd_init, cmd_state, cmd_validate, and cmd_handoff full-rewrite path."""
 
 import argparse
-from pathlib import Path
 
 from handoff_forge.cli import cmd_handoff, cmd_init, cmd_state, cmd_validate
 
@@ -195,6 +194,8 @@ class TestCmdHandoffFullRewrite:
 
     def test_backup_preserves_original_content(self, tmp_path):
         (tmp_path / "HANDOFF.md").write_text("original session notes", encoding="utf-8")
-        cmd_handoff(_handoff_args(str(tmp_path), overwrite=True))
+        result = cmd_handoff(_handoff_args(str(tmp_path), overwrite=True))
+        assert result == 0
         backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+        assert len(backups) == 1
         assert backups[0].read_text(encoding="utf-8") == "original session notes"
