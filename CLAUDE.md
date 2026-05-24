@@ -11,7 +11,7 @@ Done = a developer can run `handoff-forge init ./my-project` and get all three f
 **Non-obvious structure conventions:**
 - Templates are plain f-strings in `src/handoff_forge/services/templates.py` — do not introduce Jinja2 or any templating engine
 - All filesystem I/O goes through `src/handoff_forge/services/file_ops.py` — cli.py never touches the filesystem directly
-- Backups use the format `<filename>.bak.<YYYYMMDD-HHMMSS>` in the same directory as the original
+- Backups use the format `<filename>.bak.<YYYYMMDD-HHMMSS-ffffff>` in the same directory as the original
 - The default behavior of every write operation is non-destructive: if a file exists, back it up first
 
 ---
