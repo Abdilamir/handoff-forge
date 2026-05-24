@@ -2,6 +2,33 @@
 
 ---
 
+## Release History
+
+### [0.1.1] — 2026-05-24
+
+First feature-complete release. All 17 PRs merged, Greptile 5/5 across the board.
+
+**What's included:**
+- `init`, `handoff`, `state`, `tasks`, `validate` — 5 CLI commands, stdlib only
+- `handoff --append` for mid-session checkpoint notes (no backup created)
+- `validate` exit codes: 0 = all required files present, 1 = any missing
+- Non-destructive writes: every overwrite creates a `.bak.<YYYYMMDD-HHMMSS-ffffff>` backup with collision detection
+- CI: GitHub Actions matrix on Python 3.11/3.12/3.13 + ruff lint enforcement
+- Dev tooling: `Makefile` (install/test/lint/clean), `ruff>=0.4`, `[tool.ruff]` config
+
+**Release checklist:**
+- [ ] `pip install -e ".[dev]" && make test` — 78 tests passing
+- [ ] `make lint` — ruff clean
+- [ ] `python -m build && twine check dist/*`
+- [ ] `twine upload dist/*`
+- [ ] Create GitHub Release tag `v0.1.1`
+
+### [0.1.0] — 2026-05-22
+
+Initial working release: 5 commands, stdlib only, 28 tests.
+
+---
+
 ### [2026-05-24] — chore: add ruff linting to dev deps and CI (PR #17) — MERGED
 - **Branch:** `chore/ruff-config`
 - **Greptile:** Round 1: 3/5 (ruff dep conflict) → Round 2: 4/5 (redundant matrix runs) → Round 3: 5/5
