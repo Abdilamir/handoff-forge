@@ -18,12 +18,12 @@ def read_file(path: Path) -> str | None:
 
 def backup_file(path: Path) -> Path:
     """
-    Copy an existing file to <stem>.bak.<YYYYMMDD-HHMMSS><suffix>.
+    Copy an existing file to <stem>.bak.<YYYYMMDD-HHMMSS-ffffff><suffix>.
     Returns the backup path. Raises FileNotFoundError if source does not exist.
     """
     if not path.exists():
         raise FileNotFoundError(f"Cannot back up non-existent file: {path}")
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
     backup_path = path.with_name(f"{path.stem}.bak.{timestamp}{path.suffix}")
     shutil.copy2(path, backup_path)
     return backup_path

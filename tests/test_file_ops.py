@@ -79,6 +79,18 @@ def test_backup_file_raises_if_source_missing(tmp_path):
         backup_file(tmp_path / "ghost.md")
 
 
+def test_backup_file_two_rapid_calls_produce_distinct_files(tmp_path):
+    original = tmp_path / "HANDOFF.md"
+    original.write_text("v1", encoding="utf-8")
+    b1 = backup_file(original)
+    original.write_text("v2", encoding="utf-8")
+    b2 = backup_file(original)
+    assert b1 != b2, "rapid backups must produce unique filenames (microsecond timestamp)"
+    assert b1.exists() and b2.exists()
+    assert b1.read_text(encoding="utf-8") == "v1"
+    assert b2.read_text(encoding="utf-8") == "v2"
+
+
 def test_ensure_directory_creates_nested(tmp_path):
     target = tmp_path / "a" / "b" / "c"
     result = ensure_directory(target)
