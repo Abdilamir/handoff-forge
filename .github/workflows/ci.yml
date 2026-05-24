@@ -33,4 +33,5 @@ jobs:
         run: python -m pytest --tb=short -q
 
       - name: Run ruff lint
+        if: matrix.python-version == '3.11'
         run: python -m ruff check src/ tests/
