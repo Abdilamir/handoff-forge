@@ -4,7 +4,7 @@ import argparse
 import pytest
 from pathlib import Path
 
-from handoff_forge.cli import cmd_handoff, cmd_tasks
+from handoff_forge.cli import cmd_handoff, cmd_init, cmd_tasks
 
 
 def _make_args(task: str, target: str, phase: str = "Current Phase") -> argparse.Namespace:
@@ -132,3 +132,27 @@ def test_cmd_handoff_append_and_overwrite_errors(tmp_path):
     args = _make_handoff_args(str(tmp_path), append=True, overwrite=True)
     result = cmd_handoff(args)
     assert result == 1
+
+
+# --- backup hygiene ---
+
+def test_cmd_tasks_update_creates_no_backup(tmp_path):
+    tasks_file = tmp_path / "TASKS.md"
+    tasks_file.write_text("# TASKS.md\n\n## Phase 1\n\n- [ ] existing\n", encoding="utf-8")
+    args = _make_args("another task", str(tmp_path))
+    cmd_tasks(args)
+    backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+    assert len(backups) == 0
+
+
+def _make_init_args(target: str, *, overwrite: bool = False) -> argparse.Namespace:
+    return argparse.Namespace(target=target, overwrite=overwrite)
+
+
+def test_cmd_init_overwrite_creates_exactly_one_backup_per_file(tmp_path):
+    (tmp_path / "HANDOFF.md").write_text("old handoff", encoding="utf-8")
+    args = _make_init_args(str(tmp_path), overwrite=True)
+    cmd_init(args)
+    backups = [f for f in tmp_path.iterdir() if "bak" in f.name]
+    assert len(backups) == 1
+    assert backups[0].read_text(encoding="utf-8") == "old handoff"
