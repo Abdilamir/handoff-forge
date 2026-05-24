@@ -1,28 +1,31 @@
-# Environment & secrets
-.env
-.env.*
-*.pem
-*.key
-
-# Agent source-as-context (local only)
-open-source/
-
-# Python
+﻿# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
+*.pyd
+*.so
+
+# Distribution / packaging
 *.egg-info/
 dist/
 build/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
 .venv/
 venv/
-.pytest_cache/
-htmlcov/
-.coverage
-*.egg
+env/
 
-# OS noise
+# Backup files created by handoff-forge itself
+*.bak.*.md
+
+# Editor / OS
 .DS_Store
 Thumbs.db
-.vscode/settings.json
 *.swp
+*.swo
