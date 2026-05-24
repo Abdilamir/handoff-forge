@@ -10,7 +10,7 @@ Solves the context-loss problem between AI coding sessions. Run one command at t
 
 ```bash
 # Clone and install locally
-git clone https://github.com/<your-username>/handoff-forge.git
+git clone https://github.com/Abdilamir/handoff-forge.git
 cd handoff-forge
 pip install -e .
 
