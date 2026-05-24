@@ -4,71 +4,70 @@
 
 ---
 
-## Session: 2026-05-24 — Phase 8 Complete (PR #20 merged)
+## Session: 2026-05-24 — Phase 8 Final Checkpoint
 
 ---
 
 ## What Was Built This Session
 
-**PR #20 merged — feat: agent operating layer (99 tests, restore/after-pr20-merge):**
+**Phase 8 complete — agent operating layer on master.**
 
-4 new CLI commands:
-- `agents init [target] [--overwrite]` — creates `agents/` directory with 5 role spec markdown files
-- `agent brief <role> [--target]` — prints role spec + PROJECT_STATE.md + HANDOFF.md as a paste-ready agent prompt. Now validates role against AGENT_ROLES before touching filesystem.
-- `next [--target]` — synthesizes next action from all three state files
-- `checkpoint --task --next [--branch] [--notes] [--target]` — appends timestamped checkpoint to HANDOFF.md, no backup
+All Phase 8 work (PR #20) is merged, tagged, and CI-green:
+- `agents init` — creates `agents/` directory with 5 role spec markdown files
+- `agent brief <role>` — prints paste-ready agent brief (role spec + state + handoff)
+- `next` — synthesizes next action from all three state files
+- `checkpoint` — appends timestamped checkpoint to HANDOFF.md
+- `_extract_section` — level-aware header break (stops at same-or-higher-level `#` headers)
+- Role validation in `agent brief` before any filesystem access
+- 99 tests passing, ruff clean, all CI checks green
+- Restore tag: `restore/after-pr20-merge`
 
-5 agent role specs in `AGENT_ROLES` dict (engineer, reviewer, architect, operator, researcher):
-- Each has: Role, Responsibilities, Allowed Actions, Escalation Rules, Output Format
-
-Key bug fixes in this PR:
-- `_extract_section` rewritten to be level-aware: stops at any header with ≤ `#` count as the target header, so `### Next Step` correctly stops at `### Known Risks`
-- Dead `## Exact Next Step` fallback removed from `next_action_output`
-- Role validation added to `cmd_agent_brief` with clear error message and list of valid roles
-
-21 new tests in `tests/test_agent_commands.py` (99 total):
-- TestAgentsInit, TestAgentBrief (including invalid role test), TestNext, TestCheckpoint, TestTemplateHelpers
-
-Greptile required 2 fix iterations before merge:
-1. Round 1 (4/5): removed dead fallback + tightened `## ` break — pushed commit `858d8dc`
-2. Round 2 (4/5): level-aware `_extract_section` + role validation — pushed commit `dfbbaa1`
-3. Merged after 11-min policy (CI green all 4 checks, MERGEABLE, both findings fixed, Greptile did not re-review within window)
+**This session also produced `NEXT_CHAT_HANDOFF.md`** — a comprehensive context transfer document covering:
+- Overall mission and Project #1 objective
+- Complete architecture, command list, workflow
+- GitHub/Greptile/CI process details
+- Agent operating layer internals
+- What not to over-engineer
+- Exact commands for starting a new project with agents
 
 ---
 
 ## What Was Not Finished
 
-- Greptile did not post a 3rd review confirming 5/5 (merged under 11-min policy)
-- GitHub secret scanning — browser action required
-- PyPI publish — not yet executed
+- GitHub secret scanning — browser action required:
+  https://github.com/Abdilamir/handoff-forge/settings/security_analysis
+- PyPI publish — pre-publish blockers remain (LICENSE file, pip install path in README)
+- Project #1 has not been started yet
 
 ---
 
 ## Key Decisions
 
-- **`_extract_section` level-aware break**: header-level computed from `#` count; line must have `# ` (hash + space) to count as a header, preventing `#hashtag` false positives
-- **Role validation before file lookup**: cleaner error for typos/unknown roles vs. confusing "run agents init" message
-- **11-min merge policy applied**: two consecutive Greptile reviews with no 3rd after adequate wait; CI confirmed green
+- `NEXT_CHAT_HANDOFF.md` committed to repo root — accessible to any agent that clones the repo
+- Phase 8 treated as complete with the 11-minute merge policy applied to PR #20 Round 3
+- Restore tag `restore/phase8-final` created as the definitive checkpoint
 
 ---
 
 ## Next Step
 
-handoff-forge is feature-complete as an agent operating layer. The highest-leverage next move is to run it on a real second project:
+**Start Project #1** — a real revenue-generating project built autonomously using handoff-forge.
 
-1. `handoff-forge init <new-project-dir>` — scaffold state files
-2. `handoff-forge agents init <new-project-dir>` — scaffold role specs
-3. `handoff-forge agent brief engineer --target <new-project-dir>` — prime Claude for a real session
-4. Use `checkpoint` and `next` throughout that session
-5. Report what breaks or feels wrong — that feedback drives Phase 9
+1. Choose a project directory (outside this repo)
+2. Run the exact initialization sequence in `NEXT_CHAT_HANDOFF.md` section 16
+3. Use `handoff-forge agent brief engineer` to prime Claude for every session
+4. Use `handoff-forge next` to resume sessions without re-priming
+5. Capture what breaks or feels wrong — that drives Phase 9
 
-If continuing work on handoff-forge itself:
-- Pre-PyPI blockers: add LICENSE file (MIT), add `pip install handoff-forge` path to README
-- Browser action: enable GitHub secret scanning
+**If continuing handoff-forge work instead:**
+- Add MIT LICENSE file
+- Add `pip install handoff-forge` to README
+- Then PyPI publish
 
 ---
 
 ## Risks
 
-- Master is clean. 99 tests green. ruff clean. pip-audit clean. CI fully green.
-- 20 PRs merged. restore/after-pr20-merge tag on master.
+None. Master is clean. 99 tests green. ruff clean. pip-audit clean.
+Final restore tag: `restore/phase8-final`
+20 PRs merged. All Greptile findings resolved.
