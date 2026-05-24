@@ -6,32 +6,33 @@
 
 ---
 
-## Session: 2026-05-23 — PR #3 merge + docs/readme-append-flag
+## Session: 2026-05-23 — PR #4 merge (README docs)
 
 ### What Was Built
-- Merged PR #3 (feat/handoff-append) into master with --no-ff. Greptile 5/5 after Round 1 fixes (template header contradiction, backup accumulation on --append). 50 tests passing.
-- Created restore tag `restore/post-handoff-append-merge`.
-- Deleted feat/handoff-append local and remote.
-- Created `docs/readme-append-flag` branch and committed README update: added `--append` example with mutual-exclusion note, updated File Safety section, updated session-end loop example with mid-session checkpoint pattern.
-- Updated CHANGELOG.md, TASKS.md, PROJECT_STATE.md, HANDOFF.md on master.
+- PR #4 (`docs/readme-append-flag`) merged into master no-ff. Greptile 5/5. One finding (stale "end of every coding session" description) fixed before merge.
+- README now documents `--append` with usage example, mutual-exclusion note, backup policy clarification, and mid-session checkpoint in the workflow loop.
+- `restore/post-readme-docs-merge` tag created.
+- docs/readme-append-flag deleted local + remote.
+- CHANGELOG, TASKS, PROJECT_STATE, HANDOFF updated on master. 50 tests passing.
 
 ### What Is Not Finished
-- docs/readme-append-flag PR not yet opened (browser required).
-- chore/add-ci and chore/review-prep PRs not yet opened (browser required).
-- GitHub secret scanning not yet enabled (browser required).
+All remaining actions require browser interaction:
+1. Open PR for `chore/add-ci` — GitHub Actions CI workflow
+2. Open PR for `chore/review-prep` — review templates and grep-loop prompt
+3. Enable GitHub secret scanning
 
 ### Decisions Made
-- State files (CHANGELOG, TASKS, PROJECT_STATE, HANDOFF) committed directly to master, not bundled with feature branches — consistent with prior sessions.
-- README update isolated to docs/readme-append-flag so it gets a Greptile pass before merge.
+- Greptile finding addressed before merge even though score was already 5/5 — keeps the repo clean.
 
 ### Next Step
-Open PR for `docs/readme-append-flag` at:
-https://github.com/Abdilamir/handoff-forge/compare/master...docs/readme-append-flag
-Then wait for Greptile review. If 5/5, merge with --no-ff, delete branch, update state files, then move to chore/add-ci PR.
+Open PR for `chore/add-ci` at:
+https://github.com/Abdilamir/handoff-forge/compare/master...chore/add-ci
+
+Then share the Greptile review result to continue.
 
 ### Known Risks
 - None identified.
 
 ---
 
-*Last updated: 2026-05-23 | Session: PR #3 merge + docs/readme-append-flag*
+*Last updated: 2026-05-23 | Session: PR #4 merge (README docs)*

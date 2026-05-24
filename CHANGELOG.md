@@ -4,6 +4,16 @@
 
 ## 2026-05-23
 
+### [2026-05-23] — docs: README --append documentation (PR #4) — MERGED
+- **Branch:** `docs/readme-append-flag`
+- **Greptile:** 5/5 (one finding: stale "end of every session" description — fixed before merge)
+- **What:** Updated README `handoff` section with `--append` example, mutual-exclusion note, corrected section description, File Safety clarification (--append never creates backups), and MID-SESSION CHECKPOINT block in workflow loop.
+- **Files changed:** `README.md`
+- **Breaking changes:** None
+- **Tags:** `restore/post-readme-docs-merge`
+
+---
+
 ### [2026-05-23] — feat: handoff --append flag (PR #3) — MERGED
 - **Branch:** `feat/handoff-append`
 - **Greptile:** Round 1: 3/5 → Round 2 (after fixes): 5/5

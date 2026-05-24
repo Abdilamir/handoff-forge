@@ -5,18 +5,7 @@
 
 ---
 
-## Current — In Progress
-
-- [ ] docs: update README with --append flag documentation
-      Branch: docs/readme-append-flag (pushed, awaiting PR + Greptile)
-      Files: README.md
-      Risk: low
-
-## Browser Actions Required (unblocked)
-
-- [ ] Open PR for `docs/readme-append-flag` → merge to master
-      URL: https://github.com/Abdilamir/handoff-forge/compare/master...docs/readme-append-flag
-      Risk: low
+## Browser Actions Required (unblocked — no active code task)
 
 - [ ] Open PR for `chore/add-ci` → merge to master
       Branch: chore/add-ci (on origin)
@@ -38,7 +27,8 @@
 
 - [x] PR #1 merged: feat: validate command (Greptile 5/5)
 - [x] PR #2 merged: fix: tasks insertion position (Greptile 5/5)
-- [x] PR #3 merged: feat: handoff --append flag (Greptile 3/5 → 5/5)
+- [x] PR #3 merged: feat: handoff --append flag (Greptile 5/5)
+- [x] PR #4 merged: docs: README --append documentation (Greptile 5/5)
 
 ## TASK FORMAT
 

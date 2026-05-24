@@ -3,10 +3,10 @@
 ---
 
 ## Current Phase
-Phase 4 — Feature iteration (README --append docs)
+Phase 4 — Wrap-up (browser actions pending)
 
 ## Status
-PR #3 merged (Greptile 5/5). docs/readme-append-flag pushed — awaiting PR + Greptile.
+4 PRs merged, all with Greptile 5/5. No active code task. Waiting on browser actions: chore/add-ci PR, chore/review-prep PR, secret scanning enable.
 
 ## Stack
 - Language: Python 3.11
@@ -19,19 +19,17 @@ PR #3 merged (Greptile 5/5). docs/readme-append-flag pushed — awaiting PR + Gr
 - [x] PR #1 merged: feat: add validate command (Greptile 5/5, 33 tests)
 - [x] PR #2 merged: fix: tasks insertion position (Greptile 5/5, 42 tests)
 - [x] PR #3 merged: feat: handoff --append flag (Greptile 5/5, 50 tests)
-- [x] restore/post-handoff-append-merge tag created
-- [x] feat/handoff-append deleted local + remote
-- [x] docs/readme-append-flag pushed to origin
+- [x] PR #4 merged: docs: README --append documentation (Greptile 5/5)
+- [x] All restore tags created (4 post-merge tags + project-init)
+- [x] All feature branches deleted local + remote
 
 ## What Is In Progress
-- docs/readme-append-flag — README --append flag documentation (pushed, PR pending)
+- Nothing — waiting on browser actions
 
 ## What Is Next
-1. Open PR for docs/readme-append-flag (browser)
-2. Greptile review loop → 5/5
-3. Merge docs/readme-append-flag
-4. Open PRs for chore/add-ci and chore/review-prep (browser)
-5. Enable GitHub secret scanning (browser)
+1. Open PR for chore/add-ci (browser)
+2. Open PR for chore/review-prep (browser)
+3. Enable GitHub secret scanning (browser)
 
 ## Known Issues
 - None
