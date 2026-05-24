@@ -7,12 +7,6 @@
 
 ## Browser Actions Required (unblocked — no active code task)
 
-- [ ] Open PR for `chore/add-ci` → merge to master
-      Branch: chore/add-ci (on origin)
-      Contents: .github/workflows/ci.yml
-      URL: https://github.com/Abdilamir/handoff-forge/compare/master...chore/add-ci
-      Risk: low
-
 - [ ] Open PR for `chore/review-prep` → merge to master
       Branch: chore/review-prep (on origin)
       Contents: reviews/PR_1_review_template.md, plans/PROMPT_grep-loop.md
@@ -29,6 +23,7 @@
 - [x] PR #2 merged: fix: tasks insertion position (Greptile 5/5)
 - [x] PR #3 merged: feat: handoff --append flag (Greptile 5/5)
 - [x] PR #4 merged: docs: README --append documentation (Greptile 5/5)
+- [x] PR #5 merged: chore: GitHub Actions CI workflow (Greptile 5/5)
 
 ## TASK FORMAT
 

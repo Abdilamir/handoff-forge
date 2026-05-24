@@ -4,6 +4,16 @@
 
 ## 2026-05-23
 
+### [2026-05-23] — chore: GitHub Actions CI workflow (PR #5) — MERGED
+- **Branch:** `chore/add-ci`
+- **Greptile:** Round 1: 4/5 → Round 2: 5/5 (Round 2 note: missing job timeout — added before merge)
+- **What:** Added `.github/workflows/ci.yml` — pytest matrix on Python 3.11 and 3.12, triggered on push to master/feature/**/fix/**/chore/** and PRs targeting master. Round 1 fixes: `permissions: contents: read`, `fail-fast: false`, `cache: "pip"`. Pre-merge: `timeout-minutes: 10`.
+- **Files changed:** `.github/workflows/ci.yml` (new)
+- **Breaking changes:** None
+- **Tags:** `restore/post-ci-merge`
+
+---
+
 ### [2026-05-23] — docs: README --append documentation (PR #4) — MERGED
 - **Branch:** `docs/readme-append-flag`
 - **Greptile:** 5/5 (one finding: stale "end of every session" description — fixed before merge)

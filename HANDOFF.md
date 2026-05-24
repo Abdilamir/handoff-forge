@@ -6,33 +6,32 @@
 
 ---
 
-## Session: 2026-05-23 — PR #4 merge (README docs)
+## Session: 2026-05-23 — PR #5 merge (CI workflow)
 
 ### What Was Built
-- PR #4 (`docs/readme-append-flag`) merged into master no-ff. Greptile 5/5. One finding (stale "end of every coding session" description) fixed before merge.
-- README now documents `--append` with usage example, mutual-exclusion note, backup policy clarification, and mid-session checkpoint in the workflow loop.
-- `restore/post-readme-docs-merge` tag created.
-- docs/readme-append-flag deleted local + remote.
+- PR #5 (`chore/add-ci`) merged into master no-ff. Greptile 4/5 → 5/5.
+  - Round 1 fixes: `permissions: contents: read`, `fail-fast: false`, `cache: "pip"`
+  - Round 2 note (applied before merge): `timeout-minutes: 10`
+- `.github/workflows/ci.yml` is now live on master — pytest runs on Python 3.11 and 3.12 on every push/PR.
+- `restore/post-ci-merge` tag created. chore/add-ci deleted local + remote.
 - CHANGELOG, TASKS, PROJECT_STATE, HANDOFF updated on master. 50 tests passing.
 
 ### What Is Not Finished
-All remaining actions require browser interaction:
-1. Open PR for `chore/add-ci` — GitHub Actions CI workflow
-2. Open PR for `chore/review-prep` — review templates and grep-loop prompt
-3. Enable GitHub secret scanning
+- chore/review-prep PR not yet opened (browser required)
+- GitHub secret scanning not yet enabled (browser required)
 
 ### Decisions Made
-- Greptile finding addressed before merge even though score was already 5/5 — keeps the repo clean.
+- Greptile Round 2 noted missing timeout as quality-of-life; applied before merge even though score was 5/5 — consistent with approach on PR #4.
 
 ### Next Step
-Open PR for `chore/add-ci` at:
-https://github.com/Abdilamir/handoff-forge/compare/master...chore/add-ci
+Open PR for `chore/review-prep` at:
+https://github.com/Abdilamir/handoff-forge/compare/master...chore/review-prep
 
-Then share the Greptile review result to continue.
+Then share the Greptile result to continue.
 
 ### Known Risks
 - None identified.
 
 ---
 
-*Last updated: 2026-05-23 | Session: PR #4 merge (README docs)*
+*Last updated: 2026-05-23 | Session: PR #5 merge (CI workflow)*
